@@ -4,9 +4,16 @@ class StringsManager {
   static const String emailTxt = 'Email Address';
   static const String passwordTxt = 'Password';
   static const String forgotPassTxt = 'Forgot Password?';
+  static const String noAccTxt = 'Don\'t have an account? ';
+  static const String alreadyHaveAccTxt = 'Already have an account? ';
+
+  static const String registerTxt = 'Register';
+  static const String nameTxt = 'Full Name';
+  static const String phoneTxt = 'Phone number';
 
   // Hint Text
   static const String emailHintTxt = 'abc@gmail.com';
+  static const String phoneHintTxt = '0331XXXXXXX';
 }
 
 class ErrorManager {

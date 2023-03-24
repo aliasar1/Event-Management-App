@@ -26,6 +26,7 @@ class SizeManager {
 
   static const double splashIconSize = 150.0;
   static const double svgImageSize = 250.0;
+  static const double svgImageSizeMed = 200.0;
 }
 
 class SpacingManager {
