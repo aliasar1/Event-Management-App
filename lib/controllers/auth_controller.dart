@@ -6,10 +6,12 @@ import '../manager/firebase_constants.dart';
 import '../utils/utils.dart';
 import '../models/user.dart' as model;
 import '../views/home_screen.dart';
+import '../views/login_screen.dart';
 
 class AuthenticateController extends GetxController {
   Rx<bool> isObscure = true.obs;
   Rx<bool> isLoading = false.obs;
+  late Rx<User?> _user;
 
   final loginFormKey = GlobalKey<FormState>();
   final signupFormKey = GlobalKey<FormState>();
@@ -19,6 +21,24 @@ class AuthenticateController extends GetxController {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   late String userTypeController = 'Participant';
+
+  User get user => _user.value!;
+
+  @override
+  void onReady() {
+    super.onReady();
+    _user = Rx<User?>(firebaseAuth.currentUser!);
+    _user.bindStream(firebaseAuth.authStateChanges());
+    ever(_user, _setInitialScreen);
+  }
+
+  _setInitialScreen(User? user) {
+    if (user == null) {
+      Get.offAll(LoginScreen());
+    } else {
+      Get.offAll(HomeScreen());
+    }
+  }
 
   void toggleVisibility() {
     isObscure.value = !isObscure.value;
@@ -102,5 +122,10 @@ class AuthenticateController extends GetxController {
     passwordController.clear();
     phoneController.clear();
     userTypeController = 'Participant';
+  }
+
+  void logout() async {
+    await firebaseAuth.signOut();
+    Get.offAllNamed(LoginScreen.routeName);
   }
 }
