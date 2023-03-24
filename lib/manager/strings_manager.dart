@@ -1,3 +1,33 @@
 class StringsManager {
-  static String appName = 'EvenTick';
+  static const String appName = 'EvenTick';
+  static const String loginTxt = 'Login';
+  static const String emailTxt = 'Email Address';
+  static const String passwordTxt = 'Password';
+  static const String forgotPassTxt = 'Forgot Password?';
+
+  // Hint Text
+  static const String emailHintTxt = 'abc@gmail.com';
+}
+
+class ErrorManager {
+  // form field error
+  static const String kUserNameNullError = 'Please Enter a Name';
+  static const String kFieldEmptyError = 'Please Enter a Value';
+  static const String kEmailNullError = 'Please Enter a Valid Email';
+  static const String kPhoneNullError = 'Please Enter a Phone Number';
+
+  static const String kPasswordNullError = 'Please Enter a Password';
+  static const String kPasswordNotMatchingError = 'Passwords do not Match';
+  static const String kPasswordShortError =
+      'Please Enter a Password of at least 8 digit';
+  static const String kPasswordNotSameError =
+      'Confirm Password should be same as New Password';
+
+  static const String kCentreNameNullError = 'Please Enter a Centre Name';
+  static const String kDobNullError = 'Please Select Date of Birth';
+  static const String kGenderNullError = 'Please Select a Gender';
+  static const String kPresetNameNullError = 'Please enter a preset name';
+  static const String kEventDayPresetNullError = 'Please select event day';
+  static const String kPresetSignInNullError = 'Please select sign in time';
+  static const String kPresetSignOffNullError = 'Please select sign off time';
 }
