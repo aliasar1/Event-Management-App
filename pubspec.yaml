@@ -42,6 +42,8 @@ dependencies:
   get: ^4.6.5
   lottie: ^2.3.0
   flutter_svg: ^2.0.4
+  connectivity_plus: ^3.0.3
+  app_settings: ^4.2.0
 
 dev_dependencies:
   flutter_test:

@@ -41,8 +41,8 @@ class SignupScreen extends StatelessWidget {
                       alignment: Alignment.center,
                       child: SvgPicture.asset(
                         'assets/images/signup.svg',
-                        height: SizeManager.svgImageSizeMed,
-                        width: SizeManager.svgImageSizeMed,
+                        height: SizeManager.svgImageSize,
+                        width: SizeManager.svgImageSize,
                         fit: BoxFit.scaleDown,
                       ),
                     ),
@@ -53,7 +53,7 @@ class SignupScreen extends StatelessWidget {
                       textAlign: TextAlign.start,
                       text: StringsManager.registerTxt,
                       fontWeight: FontWeightManager.bold,
-                      fontSize: FontSize.headerFontSize * 0.8,
+                      fontSize: FontSize.headerFontSize,
                       fontFamily: FontsManager.fontFamilyPoppins,
                     ),
                     const SizedBox(
@@ -129,8 +129,7 @@ class SignupScreen extends StatelessWidget {
                             controller.emailController.text.trim(),
                             controller.passwordController.text.trim(),
                             controller.nameController.text.trim(),
-                            controller.userTypeController,
-                            controller.passwordController.text.trim(),
+                            controller.phoneController.text.trim(),
                           );
                         },
                         validator: (value) {
@@ -139,38 +138,6 @@ class SignupScreen extends StatelessWidget {
                           }
                           return null;
                         },
-                      ),
-                    ),
-                    const SizedBox(
-                      height: SizeManager.sizeSemiM,
-                    ),
-                    RadioButtonFormField(
-                      labels: const ['Participant', 'Organizer'],
-                      icons: const [Icons.account_circle, Icons.groups],
-                      onChange: (String label, int index) =>
-                          controller.userTypeController = label,
-                      onSelected: (String label) =>
-                          controller.userTypeController = label,
-                      decoration: InputDecoration(
-                        labelText: 'User Type',
-                        contentPadding: const EdgeInsets.all(0.0),
-                        labelStyle: const TextStyle(
-                          color: ColorManager.primaryColor,
-                          fontSize: FontSize.textFontSize,
-                          fontWeight: FontWeight.w400,
-                        ),
-                        hintStyle: const TextStyle(
-                          color: Colors.grey,
-                          fontSize: FontSize.textFontSize,
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: ColorManager.primaryColor,
-                            width: 2,
-                          ),
-                          borderRadius:
-                              BorderRadius.circular(RadiusManager.fieldRadius),
-                        ),
                       ),
                     ),
                     const SizedBox(
@@ -194,8 +161,7 @@ class SignupScreen extends StatelessWidget {
                             controller.emailController.text.trim(),
                             controller.passwordController.text.trim(),
                             controller.nameController.text.trim(),
-                            controller.userTypeController,
-                            controller.passwordController.text.trim(),
+                            controller.phoneController.text.trim(),
                           );
                         },
                         text: StringsManager.registerTxt,

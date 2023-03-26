@@ -6,6 +6,12 @@ class StringsManager {
   static const String forgotPassTxt = 'Forgot Password?';
   static const String noAccTxt = 'Don\'t have an account? ';
   static const String alreadyHaveAccTxt = 'Already have an account? ';
+  static const String welcomTxt = 'Welcome Back';
+  static const String offlineTxt = "You're Offline.";
+  static const String offlineMsgTxt =
+      "No Internet Connection. Make sure that Wifi or Mobile data is turned on, then try again.";
+  static const String openWifiTxt = "Open Wifi Settings";
+  static const String openDataTxt = "Open Data Settings";
 
   static const String registerTxt = 'Register';
   static const String nameTxt = 'Full Name';

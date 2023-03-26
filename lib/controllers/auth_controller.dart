@@ -5,13 +5,14 @@ import 'package:get/get.dart';
 import '../manager/firebase_constants.dart';
 import '../utils/utils.dart';
 import '../models/user.dart' as model;
-import '../views/home_screen.dart';
+import '../views/user_type_views/organizer/organizer_home_screen.dart';
+import '../views/user_type_views/participant/participant_home_screen.dart';
 import '../views/login_screen.dart';
 
 class AuthenticateController extends GetxController {
   Rx<bool> isObscure = true.obs;
   Rx<bool> isLoading = false.obs;
-  late Rx<User?> _user;
+  //late Rx<User?> _user;
 
   final loginFormKey = GlobalKey<FormState>();
   final signupFormKey = GlobalKey<FormState>();
@@ -22,23 +23,23 @@ class AuthenticateController extends GetxController {
   final TextEditingController phoneController = TextEditingController();
   late String userTypeController = 'Participant';
 
-  User get user => _user.value!;
+  // User get user => _user.value!;
 
-  @override
-  void onReady() {
-    super.onReady();
-    _user = Rx<User?>(firebaseAuth.currentUser!);
-    _user.bindStream(firebaseAuth.authStateChanges());
-    ever(_user, _setInitialScreen);
-  }
+  // @override
+  // void onReady() {
+  //   super.onReady();
+  //   _user = Rx<User?>(firebaseAuth.currentUser!);
+  //   _user.bindStream(firebaseAuth.authStateChanges());
+  //   ever(_user, _setInitialScreen);
+  // }
 
-  _setInitialScreen(User? user) {
-    if (user == null) {
-      Get.offAll(LoginScreen());
-    } else {
-      Get.offAll(HomeScreen());
-    }
-  }
+  // _setInitialScreen(User? user) {
+  //   if (user == null) {
+  //     Get.offAll(LoginScreen());
+  //   } else {
+  //     Get.offAll(HomeScreen());
+  //   }
+  // }
 
   void toggleVisibility() {
     isObscure.value = !isObscure.value;
@@ -54,14 +55,18 @@ class AuthenticateController extends GetxController {
     }
   }
 
-  Future<void> loginUser(String email, String password) async {
+  Future<void> loginUser(String email, String password, String userType) async {
     try {
       if (loginFormKey.currentState!.validate()) {
         loginFormKey.currentState!.save();
         toggleLoading();
         await firebaseAuth.signInWithEmailAndPassword(
             email: email, password: password);
-        Get.offNamed(HomeScreen.routeName);
+        if (userType == 'Participant') {
+          Get.offNamed(ParticipantHomeScreen.routeName);
+        } else {
+          Get.offNamed(OrganizerHomeScreen.routeName);
+        }
         toggleLoading();
         resetFields();
       }
@@ -74,8 +79,8 @@ class AuthenticateController extends GetxController {
     }
   }
 
-  Future<void> registerUser(String email, String password, String name,
-      String userType, String phone) async {
+  Future<void> registerUser(
+      String email, String password, String name, String phone) async {
     try {
       if (signupFormKey.currentState!.validate()) {
         signupFormKey.currentState!.save();
@@ -88,23 +93,16 @@ class AuthenticateController extends GetxController {
             profilePhoto: '',
             uid: cred.user!.uid,
             phone: phone);
-        if (userType == "Participant") {
-          await firestore
-              .collection(participantCollection)
-              .doc(cred.user!.uid)
-              .set(user.toJson());
-        } else {
-          await firestore
-              .collection(organizerCollection)
-              .doc(cred.user!.uid)
-              .set(user.toJson());
-        }
+        await firestore
+            .collection(usersCollection)
+            .doc(cred.user!.uid)
+            .set(user.toJson());
         toggleLoading();
         Get.snackbar(
           'Success!',
           'Account created successfully.',
         );
-        Get.offNamed(HomeScreen.routeName);
+        Get.offNamed(LoginScreen.routeName);
         resetFields();
       }
     } catch (e) {

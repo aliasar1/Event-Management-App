@@ -2,12 +2,12 @@ import 'package:event_booking_app/controllers/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../manager/color_manager.dart';
+import '../../../manager/color_manager.dart';
 
-class HomeScreen extends StatelessWidget {
-  HomeScreen({super.key});
+class OrganizerHomeScreen extends StatelessWidget {
+  OrganizerHomeScreen({super.key});
 
-  static const String routeName = '/homeScreen';
+  static const String routeName = '/organizerHomeScreen';
 
   AuthenticateController controller = Get.find();
 

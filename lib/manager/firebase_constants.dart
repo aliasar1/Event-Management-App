@@ -6,5 +6,6 @@ var firebaseAuth = FirebaseAuth.instance;
 var firebaseStorage = FirebaseStorage.instance;
 var firestore = FirebaseFirestore.instance;
 
-var participantCollection = 'paticipant';
-var organizerCollection = 'organizer';
+var usersCollection = 'users';
+var participantCollection = 'paticipants';
+var organizerCollection = 'organizers';

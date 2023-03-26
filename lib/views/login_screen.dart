@@ -12,6 +12,7 @@ import '../utils/size_config.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/custom_text.dart';
 import '../widgets/cutom_text_form_field.dart';
+import '../widgets/packages/group_radio_buttons/src/radio_button_field.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
@@ -55,7 +56,7 @@ class LoginScreen extends StatelessWidget {
                     Container(
                       alignment: Alignment.centerLeft,
                       child: const Txt(
-                        text: "Welcome Back",
+                        text: StringsManager.welcomTxt,
                         textAlign: TextAlign.left,
                         fontFamily: FontsManager.fontFamilyPoppins,
                         color: ColorManager.primaryColor,
@@ -82,6 +83,38 @@ class LoginScreen extends StatelessWidget {
                       },
                     ),
                     const SizedBox(
+                      height: SizeManager.sizeSemiM,
+                    ),
+                    RadioButtonFormField(
+                      labels: const ['Participant', 'Organizer'],
+                      icons: const [Icons.account_circle, Icons.groups],
+                      onChange: (String label, int index) =>
+                          controller.userTypeController = label,
+                      onSelected: (String label) =>
+                          controller.userTypeController = label,
+                      decoration: InputDecoration(
+                        labelText: 'User Type',
+                        contentPadding: const EdgeInsets.all(0.0),
+                        labelStyle: const TextStyle(
+                          color: ColorManager.primaryColor,
+                          fontSize: FontSize.textFontSize,
+                          fontWeight: FontWeight.w400,
+                        ),
+                        hintStyle: const TextStyle(
+                          color: Colors.grey,
+                          fontSize: FontSize.textFontSize,
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: ColorManager.primaryColor,
+                            width: 2,
+                          ),
+                          borderRadius:
+                              BorderRadius.circular(RadiusManager.fieldRadius),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
                       height: SizeManager.sizeL,
                     ),
                     Obx(
@@ -99,6 +132,7 @@ class LoginScreen extends StatelessWidget {
                         onFieldSubmit: (v) => controller.loginUser(
                           controller.emailController.text.trim(),
                           controller.passwordController.text.trim(),
+                          controller.userTypeController,
                         ),
                         validator: (value) {
                           if (value!.isEmpty) {
@@ -145,6 +179,7 @@ class LoginScreen extends StatelessWidget {
                           controller.loginUser(
                             controller.emailController.text.trim(),
                             controller.passwordController.text.trim(),
+                            controller.userTypeController,
                           );
                         },
                         text: StringsManager.loginTxt,
