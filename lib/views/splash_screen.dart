@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:event_booking_app/controllers/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -8,7 +9,6 @@ import '../manager/font_manager.dart';
 import '../manager/strings_manager.dart';
 import '../manager/values_manager.dart';
 import '../widgets/custom_text.dart';
-import 'login_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -20,12 +20,14 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  AuthenticateController controller = Get.find();
+
   @override
   void initState() {
     super.initState();
     Timer(
       const Duration(seconds: 2),
-      () => Get.offAllNamed(LoginScreen.routeName),
+      () => controller.checkLoginStatus(),
     );
   }
 

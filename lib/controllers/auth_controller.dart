@@ -126,4 +126,14 @@ class AuthenticateController extends GetxController {
     await firebaseAuth.signOut();
     Get.offAllNamed(LoginScreen.routeName);
   }
+
+  Future<void> checkLoginStatus() async {
+    firebaseAuth.idTokenChanges().listen((User? user) {
+      if (user == null) {
+        Get.offAllNamed(LoginScreen.routeName);
+      } else {
+        Get.offAllNamed(OrganizerHomeScreen.routeName);
+      }
+    });
+  }
 }
