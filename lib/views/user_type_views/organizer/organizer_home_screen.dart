@@ -17,7 +17,7 @@ class OrganizerHomeScreen extends StatefulWidget {
 }
 
 class _OrganizerHomeScreenState extends State<OrganizerHomeScreen> {
-  AuthenticateController controller = Get.find();
+  AuthenticateController controller = Get.put(AuthenticateController());
 
   var pageIndex = 2;
 
@@ -78,5 +78,5 @@ var pages = [
   Text('abc'),
   Text('dasorg'),
   Text('abc'),
-  ProfileView(userId: firebaseAuth.currentUser!.uid),
+  ProfileView(userId: firebaseAuth.currentUser!.uid)
 ];

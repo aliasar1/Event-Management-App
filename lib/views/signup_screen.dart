@@ -17,7 +17,7 @@ class SignupScreen extends StatelessWidget {
   SignupScreen({super.key});
   static const String routeName = '/signupScreen';
 
-  AuthenticateController controller = Get.find();
+  AuthenticateController controller = Get.put(AuthenticateController());
 
   @override
   Widget build(BuildContext context) {

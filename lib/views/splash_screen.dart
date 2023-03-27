@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:event_booking_app/controllers/auth_controller.dart';
-import 'package:event_booking_app/views/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -21,7 +20,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  AuthenticateController controller = Get.find();
+  AuthenticateController controller = Get.put(AuthenticateController());
 
   @override
   void initState() {

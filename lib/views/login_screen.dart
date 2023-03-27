@@ -18,7 +18,7 @@ class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
 
   static const String routeName = '/loginScreen';
-  AuthenticateController controller = Get.find();
+  AuthenticateController controller = Get.put(AuthenticateController());
 
   @override
   Widget build(BuildContext context) {
