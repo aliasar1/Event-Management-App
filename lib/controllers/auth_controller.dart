@@ -1,18 +1,21 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 import '../manager/firebase_constants.dart';
+import '../models/enums.dart';
 import '../utils/utils.dart';
 import '../models/user.dart' as model;
 import '../views/user_type_views/organizer/organizer_home_screen.dart';
 import '../views/user_type_views/participant/participant_home_screen.dart';
 import '../views/login_screen.dart';
 
-class AuthenticateController extends GetxController {
+class AuthenticateController extends GetxController with CacheManager {
+  RxBool isLoggedIn = false.obs;
+  RxBool isAdmin = false.obs;
   Rx<bool> isObscure = true.obs;
   Rx<bool> isLoading = false.obs;
-  //late Rx<User?> _user;
 
   final loginFormKey = GlobalKey<FormState>();
   final signupFormKey = GlobalKey<FormState>();
@@ -23,23 +26,7 @@ class AuthenticateController extends GetxController {
   final TextEditingController phoneController = TextEditingController();
   late String userTypeController = 'Participant';
 
-  // User get user => _user.value!;
-
-  // @override
-  // void onReady() {
-  //   super.onReady();
-  //   _user = Rx<User?>(firebaseAuth.currentUser!);
-  //   _user.bindStream(firebaseAuth.authStateChanges());
-  //   ever(_user, _setInitialScreen);
-  // }
-
-  // _setInitialScreen(User? user) {
-  //   if (user == null) {
-  //     Get.offAll(LoginScreen());
-  //   } else {
-  //     Get.offAll(HomeScreen());
-  //   }
-  // }
+  //model.User user = model.User();
 
   void toggleVisibility() {
     isObscure.value = !isObscure.value;
@@ -98,11 +85,11 @@ class AuthenticateController extends GetxController {
             .doc(cred.user!.uid)
             .set(user.toJson());
         toggleLoading();
+        Get.offAllNamed(LoginScreen.routeName);
         Get.snackbar(
           'Success!',
           'Account created successfully.',
         );
-        Get.offNamed(LoginScreen.routeName);
         resetFields();
       }
     } catch (e) {
@@ -120,6 +107,7 @@ class AuthenticateController extends GetxController {
     passwordController.clear();
     phoneController.clear();
     userTypeController = 'Participant';
+    update();
   }
 
   void logout() async {
@@ -130,10 +118,66 @@ class AuthenticateController extends GetxController {
   Future<void> checkLoginStatus() async {
     firebaseAuth.idTokenChanges().listen((User? user) {
       if (user == null) {
+        removeToken();
         Get.offAllNamed(LoginScreen.routeName);
       } else {
-        Get.offAllNamed(OrganizerHomeScreen.routeName);
+        Get.offAllNamed(
+          OrganizerHomeScreen.routeName,
+        );
       }
     });
+  }
+}
+
+mixin CacheManager {
+  Future<bool> saveToken(String token, bool isOrganizer) async {
+    final box = GetStorage();
+    await box.write(CacheManagerKeys.token.toString(), token);
+    await box.write(CacheManagerKeys.isOrganizer.toString(), isOrganizer);
+    return true;
+  }
+
+  Future<bool> saveOrganizerDetails(model.User organizer) async {
+    final box = GetStorage();
+    await box.write(
+        CacheManagerKeys.organizerDetails.toString(), organizer.toJson());
+    return true;
+  }
+
+  Future<bool> saveParticipantDetails(model.User participant) async {
+    final box = GetStorage();
+    await box.write(
+        CacheManagerKeys.participantDetails.toString(), participant.toJson());
+    return true;
+  }
+
+  String? getToken() {
+    final box = GetStorage();
+    return box.read(CacheManagerKeys.token.toString());
+  }
+
+  model.User? getOrganizerDetails() {
+    final box = GetStorage();
+    return model.User.fromSnap(
+        box.read(CacheManagerKeys.organizerDetails.toString()));
+  }
+
+  model.User? getParticipantDetails() {
+    final box = GetStorage();
+    return model.User.fromSnap(
+        box.read(CacheManagerKeys.participantDetails.toString()));
+  }
+
+  bool? getUserType() {
+    final box = GetStorage();
+    return box.read(CacheManagerKeys.isOrganizer.toString());
+  }
+
+  Future<void> removeToken() async {
+    final box = GetStorage();
+    await box.remove(CacheManagerKeys.token.toString());
+    await box.remove(CacheManagerKeys.isOrganizer.toString());
+    await box.remove(CacheManagerKeys.organizerDetails.toString());
+    await box.remove(CacheManagerKeys.participantDetails.toString());
   }
 }

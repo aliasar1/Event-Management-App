@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:event_booking_app/controllers/auth_controller.dart';
+import 'package:event_booking_app/views/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -30,6 +31,38 @@ class _SplashScreenState extends State<SplashScreen> {
       () => controller.checkLoginStatus(),
     );
   }
+
+  @override
+  Widget build(BuildContext context) {
+    return const SplashView();
+  }
+
+  // @override
+  // Widget build(BuildContext context) {
+  //   return Obx(
+  //     () {
+  //       if (splashController.offlineStatus.value == true) {
+  //         return const OfflineScreen();
+  //       } else {
+  //         if (controller.isLogin.value) {
+  //           if (controller.userTypeController == 'Participant') {
+  //             return ParticipantHomeScreen();
+  //           } else {
+  //             return OrganizerHomeScreen();
+  //           }
+  //         } else {
+  //           return LoginScreen();
+  //         }
+  //       }
+  //     },
+  //   );
+  // }
+}
+
+class SplashView extends StatelessWidget {
+  const SplashView({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -16,6 +16,8 @@ class StringsManager {
   static const String registerTxt = 'Register';
   static const String nameTxt = 'Full Name';
   static const String phoneTxt = 'Phone number';
+  static const String changePasswordTxt = 'Change password';
+  static const String privacyPolicyTxt = 'Privacy and policy';
 
   // Hint Text
   static const String emailHintTxt = 'abc@gmail.com';

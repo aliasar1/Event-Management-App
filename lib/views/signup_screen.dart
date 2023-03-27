@@ -12,7 +12,6 @@ import '../utils/size_config.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/custom_text.dart';
 import '../widgets/cutom_text_form_field.dart';
-import '../widgets/packages/group_radio_buttons/src/radio_button_field.dart';
 
 class SignupScreen extends StatelessWidget {
   SignupScreen({super.key});

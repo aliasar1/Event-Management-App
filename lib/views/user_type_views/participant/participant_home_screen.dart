@@ -28,6 +28,9 @@ class ParticipantHomeScreen extends StatelessWidget {
             ),
           ],
         ),
+        body: Center(
+          child: Text("parti"),
+        ),
       ),
     );
   }

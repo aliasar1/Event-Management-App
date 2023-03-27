@@ -1,17 +1,16 @@
-import 'package:event_booking_app/views/signup_screen.dart';
-import 'package:event_booking_app/views/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 import 'manager/strings_manager.dart';
 import 'routes/app_pages.dart';
 import 'routes/app_routes.dart';
-import 'views/login_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await GetStorage.init();
   runApp(const MyApp());
 }
 
