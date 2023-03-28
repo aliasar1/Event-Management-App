@@ -19,9 +19,10 @@ class StringsManager {
   static const String changePasswordTxt = 'Change password';
   static const String oldPasswordTxt = 'Old Password';
   static const String newPasswordTxt = 'New Password';
-  static const String newRePasswordTxt = 'Re-Enter New Password';
+  static const String newRePasswordTxt = 'Re-Enter Pass';
   static const String privacyPolicyTxt = 'Privacy and policy';
   static const String updateProfileTxt = 'Update Profile';
+  static const String eventNameTxt = 'Event Name';
   // Hint Text
   static const String emailHintTxt = 'abc@gmail.com';
   static const String phoneHintTxt = '0331XXXXXXX';
@@ -29,6 +30,7 @@ class StringsManager {
 
 class ErrorManager {
   // form field error
+  static const String kEventNameNullError = 'Please enter a event name';
   static const String kUserNameNullError = 'Please Enter a Name';
   static const String kFieldEmptyError = 'Please Enter a Value';
   static const String kEmailNullError = 'Please Enter a Valid Email';

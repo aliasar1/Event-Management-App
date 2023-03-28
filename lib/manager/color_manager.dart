@@ -9,4 +9,5 @@ class ColorManager {
   static const Color blueColor = Color(0xFF2c9efb);
   static const Color scaffoldBackgroundColor =
       Color.fromARGB(255, 218, 215, 215);
+  static const Color cardBackGroundColor = Color.fromARGB(255, 203, 206, 211);
 }

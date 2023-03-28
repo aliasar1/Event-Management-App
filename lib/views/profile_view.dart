@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:event_booking_app/manager/firebase_constants.dart';
 import 'package:event_booking_app/manager/values_manager.dart';
 import 'package:event_booking_app/widgets/custom_text.dart';
@@ -149,77 +147,97 @@ class _ProfileViewState extends State<ProfileView> {
             key: controller.editPassFormKey,
             child: Column(
               children: [
-                CustomTextFormField(
-                  controller: controller.oldPassController,
-                  labelText: StringsManager.oldPasswordTxt,
-                  obscureText: controller.isObscure1.value,
-                  prefixIconData: Icons.lock,
-                  textInputAction: TextInputAction.next,
-                  autofocus: false,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return ErrorManager.kPasswordNullError;
-                    }
-                    return null;
-                  },
+                Obx(
+                  () => CustomTextFormField(
+                    controller: controller.oldPassController,
+                    suffixIconData: controller.isObscure1.value
+                        ? Icons.visibility_rounded
+                        : Icons.visibility_off_rounded,
+                    onSuffixTap: controller.toggleVisibility1,
+                    labelText: StringsManager.oldPasswordTxt,
+                    obscureText: controller.isObscure1.value,
+                    prefixIconData: Icons.lock,
+                    textInputAction: TextInputAction.next,
+                    autofocus: false,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return ErrorManager.kPasswordNullError;
+                      }
+                      return null;
+                    },
+                  ),
                 ),
                 const SizedBox(
                   height: 12,
                 ),
-                CustomTextFormField(
-                  controller: controller.newPassController,
-                  labelText: StringsManager.newPasswordTxt,
-                  obscureText: controller.isObscure2.value,
-                  prefixIconData: Icons.key,
-                  textInputAction: TextInputAction.next,
-                  autofocus: false,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return ErrorManager.kPasswordNullError;
-                    }
-                    return null;
-                  },
+                Obx(
+                  () => CustomTextFormField(
+                    controller: controller.newPassController,
+                    labelText: StringsManager.newPasswordTxt,
+                    suffixIconData: controller.isObscure2.value
+                        ? Icons.visibility_rounded
+                        : Icons.visibility_off_rounded,
+                    onSuffixTap: controller.toggleVisibility2,
+                    obscureText: controller.isObscure2.value,
+                    prefixIconData: Icons.key,
+                    textInputAction: TextInputAction.next,
+                    autofocus: false,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return ErrorManager.kPasswordNullError;
+                      }
+                      return null;
+                    },
+                  ),
                 ),
                 const SizedBox(
                   height: 12,
                 ),
-                CustomTextFormField(
-                  controller: controller.newRePassController,
-                  labelText: StringsManager.newRePasswordTxt,
-                  obscureText: controller.isObscure3.value,
-                  prefixIconData: Icons.key,
-                  textInputAction: TextInputAction.done,
-                  autofocus: false,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return ErrorManager.kPasswordNullError;
-                    }
-                    return null;
-                  },
+                Obx(
+                  () => CustomTextFormField(
+                    controller: controller.newRePassController,
+                    labelText: StringsManager.newRePasswordTxt,
+                    suffixIconData: controller.isObscure3.value
+                        ? Icons.visibility_rounded
+                        : Icons.visibility_off_rounded,
+                    onSuffixTap: controller.toggleVisibility3,
+                    obscureText: controller.isObscure3.value,
+                    prefixIconData: Icons.key,
+                    textInputAction: TextInputAction.done,
+                    autofocus: false,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return ErrorManager.kPasswordNullError;
+                      }
+                      return null;
+                    },
+                  ),
                 ),
                 const SizedBox(
                   height: 12,
                 ),
-                CustomButton(
-                  color: ColorManager.blackColor,
-                  loadingWidget: controller.isLoading.value
-                      ? const Center(
-                          child: CircularProgressIndicator(
-                            color: Colors.white,
-                            backgroundColor:
-                                ColorManager.scaffoldBackgroundColor,
-                          ),
-                        )
-                      : null,
-                  onPressed: () {
-                    controller.changePassword(
-                        controller.oldPassController.text.trim(),
-                        controller.newPassController.text.trim(),
-                        controller.newRePassController.text.trim());
-                  },
-                  text: "Change",
-                  hasInfiniteWidth: true,
-                  textColor: ColorManager.backgroundColor,
+                Obx(
+                  () => CustomButton(
+                    color: ColorManager.blackColor,
+                    loadingWidget: controller.isLoading.value
+                        ? const Center(
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              backgroundColor:
+                                  ColorManager.scaffoldBackgroundColor,
+                            ),
+                          )
+                        : null,
+                    onPressed: () {
+                      controller.changePassword(
+                          controller.oldPassController.text.trim(),
+                          controller.newPassController.text.trim(),
+                          controller.newRePassController.text.trim());
+                    },
+                    text: "Change",
+                    hasInfiniteWidth: true,
+                    textColor: ColorManager.backgroundColor,
+                  ),
                 ),
               ],
             ),

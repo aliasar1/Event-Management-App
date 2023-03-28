@@ -123,6 +123,7 @@ class ProfileController extends GetxController {
       toggleLoading();
       Get.snackbar('Error!', 'Password does not match.');
     }
+    resetFields();
   }
 
   Future<String> _uploadToStorage(File image) async {
@@ -135,5 +136,14 @@ class ProfileController extends GetxController {
     TaskSnapshot snap = await uploadTask;
     String downloadUrl = await snap.ref.getDownloadURL();
     return downloadUrl;
+  }
+
+  void resetFields() {
+    nameController.clear();
+    phoneController.clear();
+    newPassController.clear();
+    newRePassController.clear();
+    oldPassController.clear();
+    update();
   }
 }
