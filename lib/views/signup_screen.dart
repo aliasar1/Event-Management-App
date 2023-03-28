@@ -85,7 +85,7 @@ class SignupScreen extends StatelessWidget {
                       prefixIconData: Icons.phone,
                       validator: (value) {
                         if (value!.isEmpty) {
-                          return ErrorManager.kPasswordNullError;
+                          return ErrorManager.kPhoneNullError;
                         }
                         return null;
                       },

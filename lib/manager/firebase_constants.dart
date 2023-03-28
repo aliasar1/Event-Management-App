@@ -7,5 +7,3 @@ var firebaseStorage = FirebaseStorage.instance;
 var firestore = FirebaseFirestore.instance;
 
 var usersCollection = 'users';
-var participantCollection = 'paticipants';
-var organizerCollection = 'organizers';

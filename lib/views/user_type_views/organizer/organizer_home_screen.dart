@@ -78,5 +78,5 @@ var pages = [
   Text('abc'),
   Text('dasorg'),
   Text('abc'),
-  ProfileView(userId: firebaseAuth.currentUser!.uid)
+  ProfileView(),
 ];
