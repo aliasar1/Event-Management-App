@@ -33,7 +33,7 @@ class TextDropdownFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropdownFormField<String>(
-      dropdownColor: ColorManager.blackColor,
+      dropdownColor: ColorManager.scaffoldBackgroundColor,
       decoration: decoration,
       onSaved: onSaved,
       controller: controller,

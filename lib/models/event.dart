@@ -2,7 +2,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_booking_app/models/user.dart';
 
 class Event {
-  String id, name, startDate, endDate, startTime, endTime, posterUrl, price;
+  String id,
+      name,
+      startDate,
+      endDate,
+      startTime,
+      endTime,
+      posterUrl,
+      price,
+      category;
   List<User>? participants;
 
   Event({
@@ -14,6 +22,7 @@ class Event {
     required this.endTime,
     required this.posterUrl,
     required this.price,
+    required this.category,
     this.participants,
   });
 
@@ -26,6 +35,7 @@ class Event {
         "endTime": endTime,
         "posterUrl": posterUrl,
         "price": price,
+        "category": category,
         "participants": participants,
       };
 
@@ -40,6 +50,7 @@ class Event {
         endTime: snapshot['endTime'],
         posterUrl: snapshot['posterUrl'],
         price: snapshot['price'],
+        category: snapshot['category'],
         participants: snapshot['participants']);
   }
 }
