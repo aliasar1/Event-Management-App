@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
+import '../manager/color_manager.dart';
 import '../manager/firebase_constants.dart';
 import '../models/enums.dart';
 import '../utils/utils.dart';
@@ -111,8 +112,35 @@ class AuthenticateController extends GetxController with CacheManager {
   }
 
   void logout() async {
-    await firebaseAuth.signOut();
-    Get.offAllNamed(LoginScreen.routeName);
+    Get.dialog(
+      AlertDialog(
+        backgroundColor: ColorManager.scaffoldBackgroundColor,
+        title: const Text('Confirm Logout'),
+        content: const Text('Are you sure you want to log out?'),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: const Text(
+              'Cancel',
+              style: TextStyle(color: ColorManager.primaryColor),
+            ),
+          ),
+          ElevatedButton(
+            style: ButtonStyle(
+                backgroundColor:
+                    MaterialStateProperty.all(ColorManager.primaryColor)),
+            onPressed: () async {
+              await firebaseAuth.signOut();
+              Get.offAllNamed(LoginScreen.routeName);
+            },
+            child: const Text(
+              'Logout',
+              style: TextStyle(color: ColorManager.backgroundColor),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Future<void> checkLoginStatus() async {

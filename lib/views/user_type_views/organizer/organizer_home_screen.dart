@@ -7,6 +7,7 @@ import '../../../manager/color_manager.dart';
 import '../../../manager/firebase_constants.dart';
 import '../../events_crud_screen.dart';
 import '../../events_screen.dart';
+import '../../organized_events_screen.dart';
 import '../../profile_view.dart';
 
 class OrganizerHomeScreen extends StatefulWidget {
@@ -76,7 +77,7 @@ class _OrganizerHomeScreenState extends State<OrganizerHomeScreen> {
 }
 
 var pages = [
-  Text('abc'),
+  EventsOrganizedScreen(),
   EventScreen(),
   AddEventScreen(),
   Text('abc'),

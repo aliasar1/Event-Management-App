@@ -24,6 +24,8 @@ class StringsManager {
   static const String updateProfileTxt = 'Update Profile';
   static const String eventNameTxt = 'Event Name';
   static const String priceTxt = 'Event Fee';
+  static const String myEventsTxt = 'My Events';
+  static const String noEventsTxt = "You haven't organized any event!";
   // Hint Text
   static const String emailHintTxt = 'abc@gmail.com';
   static const String phoneHintTxt = '0331XXXXXXX';

@@ -1,17 +1,20 @@
-import 'package:event_booking_app/manager/color_manager.dart';
-import 'package:event_booking_app/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../controllers/events_controller.dart';
-import '../controllers/search_controller.dart';
+import '../manager/color_manager.dart';
 import '../manager/font_manager.dart';
+import '../manager/strings_manager.dart';
 import '../manager/values_manager.dart';
 import '../models/event.dart';
-import '../widgets/custom_search.dart';
+import '../widgets/custom_text.dart';
 
-class EventScreen extends StatelessWidget {
-  final searchController = Get.put(SearchController());
+class EventsOrganizedScreen extends StatelessWidget {
+  EventsOrganizedScreen({super.key});
+
   final eventController = Get.put(EventController());
 
   @override
@@ -21,21 +24,25 @@ class EventScreen extends StatelessWidget {
       body: Container(
         margin: const EdgeInsets.symmetric(horizontal: MarginManager.marginM),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CustomSearchWidget(
-              controller: searchController.searchController,
-            ),
-            const SizedBox(
-              height: 12,
+            const Txt(
+              textAlign: TextAlign.start,
+              text: StringsManager.myEventsTxt,
+              fontWeight: FontWeightManager.bold,
+              fontSize: FontSize.headerFontSize,
+              fontFamily: FontsManager.fontFamilyPoppins,
             ),
             Expanded(
               child: FutureBuilder<List<Event>>(
-                future: eventController.getEvents(),
+                future: eventController.getEventsOrganized(),
                 builder: (BuildContext context,
                     AsyncSnapshot<List<Event>> snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(
-                      child: CircularProgressIndicator(),
+                      child: CircularProgressIndicator(
+                        color: ColorManager.blackColor,
+                      ),
                     );
                   } else {
                     if (snapshot.hasError) {
@@ -44,10 +51,40 @@ class EventScreen extends StatelessWidget {
                       );
                     } else {
                       final events = snapshot.data;
+                      if (events!.isEmpty) {
+                        return Center(
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(
+                                horizontal: MarginManager.marginXL),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                SvgPicture.asset(
+                                  'assets/images/noevent.svg',
+                                  height: SizeManager.svgImageSize,
+                                  width: SizeManager.svgImageSize,
+                                  fit: BoxFit.scaleDown,
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                const Txt(
+                                  textAlign: TextAlign.center,
+                                  text: StringsManager.noEventsTxt,
+                                  fontWeight: FontWeightManager.bold,
+                                  fontSize: FontSize.titleFontSize,
+                                  fontFamily: FontsManager.fontFamilyPoppins,
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }
                       return ListView.builder(
-                        itemCount: events?.length ?? 0,
+                        itemCount: events.length,
                         itemBuilder: (ctx, i) {
-                          final event = events![i];
+                          final event = events[i];
                           return Container(
                             margin: const EdgeInsets.symmetric(
                                 vertical: MarginManager.marginXS),

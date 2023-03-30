@@ -95,6 +95,25 @@ class EventController extends GetxController {
     }
   }
 
+  Future<List<Event>> getEventsOrganized() async {
+    try {
+      QuerySnapshot snapshot = await firestore
+          .collection('events')
+          .where('organizerId', isEqualTo: firebaseAuth.currentUser!.uid)
+          .get();
+      List<Future<Event>> futures =
+          snapshot.docs.map((doc) => Event.fromSnap(doc)).toList();
+      List<Event> events = await Future.wait(futures);
+      return events;
+    } catch (e) {
+      Get.snackbar(
+        'Error!',
+        'Error fetching event details.',
+      );
+      return [];
+    }
+  }
+
   Future<List<Event>> getEvents() async {
     try {
       QuerySnapshot snapshot = await firestore.collection('events').get();
