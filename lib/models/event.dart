@@ -12,6 +12,7 @@ class Event {
       price,
       category;
   List<User>? participants;
+  String organizerId;
 
   Event({
     required this.id,
@@ -23,6 +24,7 @@ class Event {
     required this.posterUrl,
     required this.price,
     required this.category,
+    required this.organizerId,
     this.participants,
   });
 
@@ -37,20 +39,24 @@ class Event {
         "price": price,
         "category": category,
         "participants": participants,
+        "organizerId": organizerId
       };
 
   static Event fromSnap(DocumentSnapshot snap) {
     var snapshot = snap.data() as Map<String, dynamic>;
+
     return Event(
-        id: snapshot['id'],
-        name: snapshot['name'],
-        startDate: snapshot['startDate'],
-        endDate: snapshot['endDate'],
-        startTime: snapshot['startTime'],
-        endTime: snapshot['endTime'],
-        posterUrl: snapshot['posterUrl'],
-        price: snapshot['price'],
-        category: snapshot['category'],
-        participants: snapshot['participants']);
+      id: snapshot['id'],
+      name: snapshot['name'],
+      startDate: snapshot['startDate'],
+      endDate: snapshot['endDate'],
+      startTime: snapshot['startTime'],
+      endTime: snapshot['endTime'],
+      posterUrl: snapshot['posterUrl'],
+      price: snapshot['price'],
+      category: snapshot['category'],
+      participants: snapshot['participants'],
+      organizerId: snapshot['organizerId'],
+    );
   }
 }

@@ -62,8 +62,8 @@ class EventController extends GetxController {
     update();
   }
 
-  void addEvent(String posterUrl, String name, String startDate, String endDate,
-      String startTime, String endTime, String price, String category) async {
+  void addEvent(String name, String startDate, String endDate, String startTime,
+      String endTime, String price, String category) async {
     if (addFormKey.currentState!.validate()) {
       addFormKey.currentState!.save();
       String id = await getUniqueId();
@@ -81,6 +81,7 @@ class EventController extends GetxController {
         category: category,
         posterUrl: posterUrl,
         participants: [],
+        organizerId: firebaseAuth.currentUser!.uid,
       );
       await firestore.collection('events').doc(id).set(event.toJson());
       toggleLoading();
@@ -101,5 +102,6 @@ class EventController extends GetxController {
     endTimeController.clear();
     priceController.clear();
     categoryController.dispose();
+    _pickedImage.value = null;
   }
 }

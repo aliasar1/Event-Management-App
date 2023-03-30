@@ -429,16 +429,14 @@ class AddEventScreen extends StatelessWidget {
                       )
                     : null,
                 onPressed: () async {
-                  print(eventController.posterPhoto.isNull);
                   eventController.addEvent(
-                      "eventController.posterPhoto as String",
                       eventController.nameController.text.trim(),
                       eventController.startDateController.text,
                       eventController.endDateController.text,
                       eventController.startTimeController.text,
                       eventController.endTimeController.text,
                       eventController.priceController.text.trim(),
-                      eventController.categoryController.toString());
+                      eventController.categoryController.value!);
                 },
                 text: "Add",
                 hasInfiniteWidth: true,
