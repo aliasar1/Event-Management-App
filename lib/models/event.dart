@@ -42,8 +42,16 @@ class Event {
         "organizerId": organizerId
       };
 
-  static Event fromSnap(DocumentSnapshot snap) {
+  static Future<Event> fromSnap(DocumentSnapshot snap) async {
     var snapshot = snap.data() as Map<String, dynamic>;
+
+    List<String> participantIds = List<String>.from(snapshot['participants']);
+    List<User> participants = [];
+    for (String id in participantIds) {
+      DocumentSnapshot userSnap =
+          await FirebaseFirestore.instance.collection('users').doc(id).get();
+      participants.add(User.fromSnap(userSnap));
+    }
 
     return Event(
       id: snapshot['id'],
@@ -55,7 +63,7 @@ class Event {
       posterUrl: snapshot['posterUrl'],
       price: snapshot['price'],
       category: snapshot['category'],
-      participants: snapshot['participants'],
+      participants: participants,
       organizerId: snapshot['organizerId'],
     );
   }

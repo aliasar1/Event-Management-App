@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -91,6 +92,22 @@ class EventController extends GetxController {
         'Event added successfully.',
       );
       resetFields();
+    }
+  }
+
+  Future<List<Event>> getEvents() async {
+    try {
+      QuerySnapshot snapshot = await firestore.collection('events').get();
+      List<Future<Event>> futures =
+          snapshot.docs.map((doc) => Event.fromSnap(doc)).toList();
+      List<Event> events = await Future.wait(futures);
+      return events; // return the list of Event objects
+    } catch (e) {
+      Get.snackbar(
+        'Error!',
+        'Error fetching event detaisl.',
+      );
+      return []; // return an empty list instead of null
     }
   }
 
