@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../manager/color_manager.dart';
 import '../manager/firebase_constants.dart';
 import '../models/event.dart';
 import '../utils/utils.dart';
@@ -18,13 +19,16 @@ class EventController extends GetxController {
   final Rx<File?> _pickedImage = Rx<File?>(null);
   File? get posterPhoto => _pickedImage.value;
 
+  RxList<Event> myEvents = <Event>[].obs;
+  RxList<Event> allEvents = <Event>[].obs;
+
   final nameController = TextEditingController();
   final startDateController = TextEditingController();
   final endDateController = TextEditingController();
   final startTimeController = TextEditingController();
   final endTimeController = TextEditingController();
   final priceController = TextEditingController();
-  final categoryController = DropdownEditingController<String>();
+  var categoryController = DropdownEditingController<String>();
 
   void toggleLoading({bool showMessage = false, String message = ''}) {
     isLoading.value = !isLoading.value;
@@ -85,6 +89,7 @@ class EventController extends GetxController {
         organizerId: firebaseAuth.currentUser!.uid,
       );
       await firestore.collection('events').doc(id).set(event.toJson());
+      allEvents.add(event);
       toggleLoading();
       Get.back();
       Get.snackbar(
@@ -104,6 +109,7 @@ class EventController extends GetxController {
       List<Future<Event>> futures =
           snapshot.docs.map((doc) => Event.fromSnap(doc)).toList();
       List<Event> events = await Future.wait(futures);
+      myEvents = RxList<Event>.from(events.toList());
       return events;
     } catch (e) {
       Get.snackbar(
@@ -114,12 +120,58 @@ class EventController extends GetxController {
     }
   }
 
+  void deleteEvent(String eventId) async {
+    try {
+      Get.dialog(
+        AlertDialog(
+          backgroundColor: ColorManager.scaffoldBackgroundColor,
+          title: const Text('Confirm Delete'),
+          content: const Text('Are you sure you want to delete event?'),
+          actions: [
+            TextButton(
+              onPressed: () => Get.back(),
+              child: const Text(
+                'Cancel',
+                style: TextStyle(color: ColorManager.primaryColor),
+              ),
+            ),
+            ElevatedButton(
+              style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all(ColorManager.primaryColor)),
+              onPressed: () async {
+                await firestore.collection('events').doc(eventId).delete();
+                allEvents.removeWhere((event) => event.id == eventId);
+                myEvents.removeWhere((event) => event.id == eventId);
+                Get.back();
+                Get.snackbar(
+                  'Success!',
+                  'Event successfully deleted.',
+                );
+              },
+              child: const Text(
+                'Delete',
+                style: TextStyle(color: ColorManager.backgroundColor),
+              ),
+            ),
+          ],
+        ),
+      );
+    } catch (e) {
+      Get.snackbar(
+        'Error!',
+        e.toString(),
+      );
+    }
+  }
+
   Future<List<Event>> getEvents() async {
     try {
       QuerySnapshot snapshot = await firestore.collection('events').get();
       List<Future<Event>> futures =
           snapshot.docs.map((doc) => Event.fromSnap(doc)).toList();
       List<Event> events = await Future.wait(futures);
+      allEvents = RxList<Event>.from(events.toList());
       return events; // return the list of Event objects
     } catch (e) {
       Get.snackbar(
@@ -138,6 +190,7 @@ class EventController extends GetxController {
     endTimeController.clear();
     priceController.clear();
     categoryController.dispose();
+    categoryController = DropdownEditingController<String>();
     _pickedImage.value = null;
   }
 }

@@ -35,7 +35,9 @@ class EventScreen extends StatelessWidget {
                     AsyncSnapshot<List<Event>> snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(
-                      child: CircularProgressIndicator(),
+                      child: CircularProgressIndicator(
+                        color: ColorManager.blackColor,
+                      ),
                     );
                   } else {
                     if (snapshot.hasError) {
