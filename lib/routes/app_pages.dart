@@ -2,8 +2,8 @@ import 'package:event_booking_app/views/login_screen.dart';
 import 'package:event_booking_app/views/signup_screen.dart';
 import 'package:get/get.dart';
 
-import '../views/user_type_views/organizer/organizer_home_screen.dart';
-import '../views/user_type_views/participant/participant_home_screen.dart';
+import '../views/organizer_home_screen.dart';
+import '../views/participant_home_screen.dart';
 import '../views/splash_screen.dart';
 import 'app_routes.dart';
 

@@ -8,13 +8,12 @@ import '../manager/firebase_constants.dart';
 import '../models/enums.dart';
 import '../utils/utils.dart';
 import '../models/user.dart' as model;
-import '../views/user_type_views/organizer/organizer_home_screen.dart';
-import '../views/user_type_views/participant/participant_home_screen.dart';
+import '../views/organizer_home_screen.dart';
+import '../views/participant_home_screen.dart';
 import '../views/login_screen.dart';
 
 class AuthenticateController extends GetxController with CacheManager {
   RxBool isLoggedIn = false.obs;
-  RxBool isAdmin = false.obs;
   Rx<bool> isObscure = true.obs;
   Rx<bool> isLoading = false.obs;
 
@@ -26,8 +25,6 @@ class AuthenticateController extends GetxController with CacheManager {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   late String userTypeController = 'Participant';
-
-  //model.User user = model.User();
 
   void toggleVisibility() {
     isObscure.value = !isObscure.value;
@@ -47,12 +44,15 @@ class AuthenticateController extends GetxController with CacheManager {
     try {
       if (loginFormKey.currentState!.validate()) {
         loginFormKey.currentState!.save();
+        isLoggedIn.value = true;
         toggleLoading();
         await firebaseAuth.signInWithEmailAndPassword(
             email: email, password: password);
         if (userType == 'Participant') {
+          saveToken(firebaseAuth.currentUser!.uid, false);
           Get.offNamed(ParticipantHomeScreen.routeName);
         } else {
+          saveToken(firebaseAuth.currentUser!.uid, true);
           Get.offNamed(OrganizerHomeScreen.routeName);
         }
         toggleLoading();
@@ -131,6 +131,8 @@ class AuthenticateController extends GetxController with CacheManager {
                     MaterialStateProperty.all(ColorManager.primaryColor)),
             onPressed: () async {
               await firebaseAuth.signOut();
+              removeToken();
+              isLoggedIn.value = false;
               Get.offAllNamed(LoginScreen.routeName);
             },
             child: const Text(
@@ -149,9 +151,11 @@ class AuthenticateController extends GetxController with CacheManager {
         removeToken();
         Get.offAllNamed(LoginScreen.routeName);
       } else {
-        Get.offAllNamed(
-          OrganizerHomeScreen.routeName,
-        );
+        if (getUserType() == true) {
+          Get.offAllNamed(OrganizerHomeScreen.routeName);
+        } else {
+          Get.offAllNamed(ParticipantHomeScreen.routeName);
+        }
       }
     });
   }
@@ -165,35 +169,9 @@ mixin CacheManager {
     return true;
   }
 
-  Future<bool> saveOrganizerDetails(model.User organizer) async {
-    final box = GetStorage();
-    await box.write(
-        CacheManagerKeys.organizerDetails.toString(), organizer.toJson());
-    return true;
-  }
-
-  Future<bool> saveParticipantDetails(model.User participant) async {
-    final box = GetStorage();
-    await box.write(
-        CacheManagerKeys.participantDetails.toString(), participant.toJson());
-    return true;
-  }
-
   String? getToken() {
     final box = GetStorage();
     return box.read(CacheManagerKeys.token.toString());
-  }
-
-  model.User? getOrganizerDetails() {
-    final box = GetStorage();
-    return model.User.fromSnap(
-        box.read(CacheManagerKeys.organizerDetails.toString()));
-  }
-
-  model.User? getParticipantDetails() {
-    final box = GetStorage();
-    return model.User.fromSnap(
-        box.read(CacheManagerKeys.participantDetails.toString()));
   }
 
   bool? getUserType() {
@@ -205,7 +183,5 @@ mixin CacheManager {
     final box = GetStorage();
     await box.remove(CacheManagerKeys.token.toString());
     await box.remove(CacheManagerKeys.isOrganizer.toString());
-    await box.remove(CacheManagerKeys.organizerDetails.toString());
-    await box.remove(CacheManagerKeys.participantDetails.toString());
   }
 }

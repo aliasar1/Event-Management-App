@@ -420,11 +420,11 @@ class AddEventScreen extends StatelessWidget {
             Obx(
               () => CustomButton(
                 color: ColorManager.blackColor,
+                buttonType: ButtonType.loading,
                 loadingWidget: eventController.isLoading.value
                     ? const Center(
                         child: CircularProgressIndicator(
                           color: Colors.white,
-                          backgroundColor: ColorManager.scaffoldBackgroundColor,
                         ),
                       )
                     : null,

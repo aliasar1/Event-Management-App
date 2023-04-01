@@ -8,6 +8,10 @@ class StringsManager {
   static const String alreadyHaveAccTxt = 'Already have an account? ';
   static const String welcomTxt = 'Welcome Back';
   static const String offlineTxt = "You're Offline.";
+  static const String searchEventTxt = "Search Event";
+  static const String searchNowEventTxt = "Search Events Now!";
+
+  static const String noEventTxt = "No event found!";
   static const String offlineMsgTxt =
       "No Internet Connection. Make sure that Wifi or Mobile data is turned on, then try again.";
   static const String openWifiTxt = "Open Wifi Settings";
@@ -26,6 +30,7 @@ class StringsManager {
   static const String priceTxt = 'Event Fee';
   static const String myEventsTxt = 'My Events';
   static const String noEventsTxt = "You haven't organized any event!";
+  static const String ongoingEventsTxt = "Ongoing Events";
   // Hint Text
   static const String emailHintTxt = 'abc@gmail.com';
   static const String phoneHintTxt = '0331XXXXXXX';

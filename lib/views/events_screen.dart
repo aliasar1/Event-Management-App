@@ -4,14 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../controllers/events_controller.dart';
-import '../controllers/search_controller.dart';
 import '../manager/font_manager.dart';
+import '../manager/strings_manager.dart';
 import '../manager/values_manager.dart';
 import '../models/event.dart';
-import '../widgets/custom_search.dart';
 
 class EventScreen extends StatelessWidget {
-  final searchController = Get.put(SearchController());
   final eventController = Get.put(EventController());
 
   @override
@@ -21,9 +19,14 @@ class EventScreen extends StatelessWidget {
       body: Container(
         margin: const EdgeInsets.symmetric(horizontal: MarginManager.marginM),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CustomSearchWidget(
-              controller: searchController.searchController,
+            const Txt(
+              textAlign: TextAlign.start,
+              text: StringsManager.ongoingEventsTxt,
+              fontWeight: FontWeightManager.bold,
+              fontSize: FontSize.headerFontSize,
+              fontFamily: FontsManager.fontFamilyPoppins,
             ),
             const SizedBox(
               height: 12,

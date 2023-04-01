@@ -71,10 +71,11 @@ class EventController extends GetxController {
       String endTime, String price, String category) async {
     if (addFormKey.currentState!.validate()) {
       addFormKey.currentState!.save();
-      String id = await getUniqueId();
       toggleLoading();
-      String posterUrl = await _uploadToStorage(_pickedImage.value!);
+      String id = await getUniqueId();
 
+      String posterUrl = await _uploadToStorage(_pickedImage.value!);
+      name = name.toLowerCase();
       Event event = Event(
         id: id,
         name: name,

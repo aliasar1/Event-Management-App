@@ -1,17 +1,22 @@
 import 'dart:async';
 
-import 'package:event_booking_app/controllers/auth_controller.dart';
+import 'package:event_booking_app/views/organizer_home_screen.dart';
+import 'package:event_booking_app/views/participant_home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../controllers/splash_controller.dart';
 import '../manager/color_manager.dart';
 import '../manager/font_manager.dart';
 import '../manager/strings_manager.dart';
 import '../manager/values_manager.dart';
+import '../utils/size_config.dart';
 import '../widgets/custom_text.dart';
+import 'login_screen.dart';
+import 'offline_screen.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key});
+  const SplashScreen({Key? key}) : super(key: key);
 
   static const String routeName = '/splashScreen';
 
@@ -20,20 +25,21 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  AuthenticateController controller = Get.put(AuthenticateController());
+  final splashController = Get.put(SplashController());
 
   @override
   void initState() {
     super.initState();
     Timer(
       const Duration(seconds: 2),
-      () => controller.checkLoginStatus(),
+      () => splashController.authController.checkLoginStatus(),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return const SplashView();
+    SizeConfig().init(context);
+    return SplashView();
   }
 
   // @override

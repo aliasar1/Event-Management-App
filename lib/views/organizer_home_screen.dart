@@ -3,12 +3,11 @@ import 'package:event_booking_app/controllers/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../manager/color_manager.dart';
-import '../../../manager/firebase_constants.dart';
-import '../../events_crud_screen.dart';
-import '../../events_screen.dart';
-import '../../organized_events_screen.dart';
-import '../../profile_view.dart';
+import '../manager/color_manager.dart';
+import 'events_crud_screen.dart';
+import 'events_screen.dart';
+import 'organized_events_screen.dart';
+import 'profile_view.dart';
 
 class OrganizerHomeScreen extends StatefulWidget {
   OrganizerHomeScreen({super.key});
@@ -24,7 +23,7 @@ class _OrganizerHomeScreenState extends State<OrganizerHomeScreen> {
 
   var pageIndex = 2;
 
-  GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
+  final GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -55,8 +54,6 @@ class _OrganizerHomeScreenState extends State<OrganizerHomeScreen> {
           animationCurve: Curves.easeInOut,
           animationDuration: const Duration(milliseconds: 500),
           items: const <Widget>[
-            Icon(Icons.confirmation_num,
-                size: 30, color: ColorManager.blackColor),
             Icon(Icons.history, size: 30, color: ColorManager.blackColor),
             Icon(Icons.home_rounded, size: 30, color: ColorManager.blackColor),
             Icon(Icons.qr_code, size: 30, color: ColorManager.blackColor),
@@ -78,7 +75,6 @@ class _OrganizerHomeScreenState extends State<OrganizerHomeScreen> {
 
 var pages = [
   EventsOrganizedScreen(),
-  EventScreen(),
   AddEventScreen(),
   Text('abc'),
   ProfileView(),
