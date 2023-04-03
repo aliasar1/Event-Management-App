@@ -38,7 +38,7 @@ class Event {
         "price": price,
         "category": category,
         "description": description,
-        "organizerId": organizerId
+        "organizerId": organizerId,
       };
 
   static Event fromSnap(DocumentSnapshot snap) {

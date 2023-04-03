@@ -16,6 +16,7 @@ import '../widgets/packages/dropdown_plus/src/dropdown.dart';
 class EventController extends GetxController {
   Rx<bool> isLoading = false.obs;
   Rx<bool> isLoading2 = false.obs;
+  Rx<bool> isFav = false.obs;
   final addFormKey = GlobalKey<FormState>();
 
   final Rx<File?> _pickedImage = Rx<File?>(null);
@@ -268,6 +269,53 @@ class EventController extends GetxController {
         'Error fetching event details: $e',
       );
       return [];
+    }
+  }
+
+  Future<bool> getFavStatus(String id) async {
+    QuerySnapshot<Map<String, dynamic>> snap = await firestore
+        .collection('events')
+        .doc(id)
+        .collection('participants')
+        .where('uid', isEqualTo: firebaseAuth.currentUser!.uid)
+        .get();
+
+    if (snap.docs.isNotEmpty) {
+      Map<String, dynamic> data = snap.docs.first.data();
+      return data['isFav'] ?? false;
+    } else {
+      return false;
+    }
+  }
+
+  void toggleFavStatus(Event event) async {
+    try {
+      DocumentReference docRef = firestore
+          .collection('events')
+          .doc(event.id)
+          .collection('favourite')
+          .doc(firebaseAuth.currentUser!.uid);
+
+      bool status = (await docRef.get()).exists;
+
+      if (!status) {
+        await docRef.set({
+          'eventId': event.id,
+          'uid': firebaseAuth.currentUser!.uid,
+          'isFav': true
+        });
+        Get.snackbar(
+          'Success!',
+          'Event successfully marked as favourite.',
+        );
+      } else {
+        await docRef.delete();
+      }
+    } catch (e) {
+      Get.snackbar(
+        'Error!',
+        'Error marking event as favourite.',
+      );
     }
   }
 

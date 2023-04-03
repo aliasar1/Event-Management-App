@@ -10,6 +10,7 @@ import '../manager/strings_manager.dart';
 import '../manager/values_manager.dart';
 import '../models/event.dart';
 import '../widgets/custom_bottom_sheet.dart';
+import '../widgets/fav_icon.dart';
 
 class EventScreen extends StatelessWidget {
   final eventController = Get.put(EventController());
@@ -139,17 +140,18 @@ class EventScreen extends StatelessWidget {
                                         Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.end,
-                                          children: const [
-                                            Icon(Icons.favorite_border,
-                                                color:
-                                                    ColorManager.primaryColor),
-                                            SizedBox(
+                                          children: [
+                                            FavoriteIcon(
+                                              event: event,
+                                              eventController: eventController,
+                                            ),
+                                            const SizedBox(
                                               width: 12,
                                             ),
-                                            Icon(Icons.calendar_month,
+                                            const Icon(Icons.calendar_month,
                                                 color:
                                                     ColorManager.primaryColor),
-                                            SizedBox(
+                                            const SizedBox(
                                               width: 12,
                                             ),
                                           ],
