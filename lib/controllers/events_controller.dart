@@ -21,9 +21,9 @@ class EventController extends GetxController {
   final Rx<File?> _pickedImage = Rx<File?>(null);
   File? get posterPhoto => _pickedImage.value;
 
-  RxList<Event> myEvents = <Event>[].obs;
+  RxList<Event> organizedEvents = <Event>[].obs;
   RxList<Event> allEvents = <Event>[].obs;
-  RxList<Event> registeredEvents = <Event>[].obs;
+  RxList<Event> attendedEvents = <Event>[].obs;
 
   final nameController = TextEditingController();
   final startDateController = TextEditingController();
@@ -95,7 +95,6 @@ class EventController extends GetxController {
         category: category,
         posterUrl: posterUrl,
         description: description,
-        participants: [],
         organizerId: firebaseAuth.currentUser!.uid,
       );
       await firestore.collection('events').doc(id).set(event.toJson());
@@ -119,13 +118,13 @@ class EventController extends GetxController {
       } else {
         final docSnapshot =
             await firestore.collection('users').doc(userObj.uid).get();
-        user = User.fromMap(docSnapshot.data()!);
+        user = User.fromMap(docSnapshot);
       }
-
-      final eventRef = firestore.collection('events').doc(eventId);
-      await eventRef.update({
-        'participants': FieldValue.arrayUnion([user.toJson()])
-      });
+      await firestore
+          .collection('events')
+          .doc(eventId)
+          .collection('participants')
+          .add(user.toJson());
       toggleLoading2();
       Get.back();
       Get.snackbar(
@@ -147,14 +146,10 @@ class EventController extends GetxController {
           .collection('events')
           .where('organizerId', isEqualTo: firebaseAuth.currentUser!.uid)
           .get();
-      List<Future<Event>> futures = [];
-      futures = snapshot.docs.map((doc) => Event.fromSnap(doc)).toList();
-
+      var eventsList = snapshot.docs.map((e) => Event.fromSnap(e)).toList();
       List<Event> events = [];
-
-      for (var future in futures) {
+      for (var event in eventsList) {
         try {
-          var event = await future;
           events.add(event);
         } catch (e) {
           Get.snackbar(
@@ -163,7 +158,7 @@ class EventController extends GetxController {
           );
         }
       }
-      allEvents = RxList<Event>.from(events.toList());
+      organizedEvents = RxList<Event>.from(events.toList());
       return events;
     } catch (e) {
       Get.snackbar(
@@ -196,7 +191,7 @@ class EventController extends GetxController {
               onPressed: () async {
                 await firestore.collection('events').doc(eventId).delete();
                 allEvents.removeWhere((event) => event.id == eventId);
-                myEvents.removeWhere((event) => event.id == eventId);
+                organizedEvents.removeWhere((event) => event.id == eventId);
                 Get.back();
                 Get.snackbar(
                   'Success!',
@@ -219,17 +214,13 @@ class EventController extends GetxController {
     }
   }
 
-  Future<List<Event>> getEvents() async {
+  Future<List<Event>> getAllEvents() async {
     try {
       QuerySnapshot snapshot = await firestore.collection('events').get();
-      List<Future<Event>> futures = [];
-      futures = snapshot.docs.map((doc) => Event.fromSnap(doc)).toList();
-
+      var eventsList = snapshot.docs.map((e) => Event.fromSnap(e)).toList();
       List<Event> events = [];
-
-      for (var future in futures) {
+      for (var event in eventsList) {
         try {
-          var event = await future;
           events.add(event);
         } catch (e) {
           Get.snackbar(
@@ -249,61 +240,28 @@ class EventController extends GetxController {
     }
   }
 
-  // Future<List<Event>> getRegisteredEvents() async {
-  //   try {
-  //     QuerySnapshot snapshot = await firestore.collection('events').get();
-  //     List<Future<Event>> futures = [];
-  //     futures = snapshot.docs.map((doc) => Event.fromSnap(doc)).toList();
-
-  //     List<Event> events = [];
-
-  //     for (var future in futures) {
-  //       try {
-  //         var event = await future;
-  //         events.add(event);
-  //       } catch (e) {
-  //         Get.snackbar(
-  //           'Error!',
-  //           'Error fetching event details: $e',
-  //         );
-  //       }
-  //     }
-  //     allEvents = RxList<Event>.from(events.toList());
-  //     return events;
-  //   } catch (e) {
-  //     Get.snackbar(
-  //       'Error!',
-  //       'Error fetching event details: $e',
-  //     );
-  //     return [];
-  //   }
-  // }
-
   Future<List<Event>> getAttendedEvents() async {
     try {
-      print(firebaseAuth.currentUser!.uid);
-      QuerySnapshot snapshot = await firestore.collection('events').where(
-          'participants',
-          arrayContains: {'uid': firebaseAuth.currentUser!.uid}).get();
+      QuerySnapshot eventSnapshot = await firestore.collection('events').get();
+      List<String> eventIds = eventSnapshot.docs.map((doc) => doc.id).toList();
+      List<Event> events = [];
+      for (var eventId in eventIds) {
+        QuerySnapshot participantSnapshot = await firestore
+            .collection('events')
+            .doc(eventId)
+            .collection('participants')
+            .where('uid', isEqualTo: firebaseAuth.currentUser!.uid)
+            .get();
 
-      print(snapshot.docs.length);
-      print("here");
-      List<Future<Event>> futures = [];
-      futures = snapshot.docs.map((doc) => Event.fromSnap(doc)).toList();
-      print(futures.length);
-      for (var future in futures) {
-        try {
-          var event = await future;
-          registeredEvents.add(event);
-        } catch (e) {
-          Get.snackbar(
-            'Error!',
-            'Error fetching event details: $e',
-          );
+        if (participantSnapshot.docs.isNotEmpty) {
+          DocumentSnapshot eventDoc =
+              await firestore.collection('events').doc(eventId).get();
+          Event event = Event.fromSnap(eventDoc);
+          events.add(event);
         }
       }
-      registeredEvents = RxList<Event>.from(registeredEvents.toList());
-      return registeredEvents;
+      attendedEvents = RxList<Event>.from(events.toList());
+      return events;
     } catch (e) {
       Get.snackbar(
         'Error!',

@@ -84,116 +84,113 @@ class _SearchScreenState extends State<SearchScreen> {
                           ],
                         ),
                       )
-                    : Expanded(
-                        child: ListView.builder(
-                          itemCount: searchController.searchedEvents.length,
-                          itemBuilder: (context, index) {
-                            Event event =
-                                searchController.searchedEvents[index];
-                            return InkWell(
-                              onTap: () {
-                                showModalBottomSheet(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return CustomBottomSheet(event: event);
-                                    });
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: ColorManager.cardBackGroundColor,
-                                ),
-                                margin: const EdgeInsets.symmetric(
-                                    vertical: MarginManager.marginXS),
-                                width: double.infinity,
-                                height: 120,
-                                child: Row(
-                                  children: [
-                                    SizedBox(
-                                      width: 140,
-                                      height: 150,
-                                      child: Image.network(
-                                        event.posterUrl,
-                                        loadingBuilder: (BuildContext context,
-                                            Widget child,
-                                            ImageChunkEvent? loadingProgress) {
-                                          if (loadingProgress == null) {
-                                            return child;
-                                          }
-                                          return Center(
-                                            child: CircularProgressIndicator(
-                                              color: ColorManager.blackColor,
-                                              value: loadingProgress
-                                                          .expectedTotalBytes !=
-                                                      null
-                                                  ? loadingProgress
-                                                          .cumulativeBytesLoaded /
-                                                      loadingProgress
-                                                          .expectedTotalBytes!
-                                                  : null,
-                                            ),
-                                          );
-                                        },
-                                        errorBuilder: (BuildContext context,
-                                            Object exception,
-                                            StackTrace? stackTrace) {
-                                          return const Icon(Icons.error);
-                                        },
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 12,
-                                    ),
-                                    Flexible(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
-                                        children: [
-                                          Txt(
-                                            text:
-                                                '${event.startDate} at ${event.startTime}',
-                                            useOverflow: true,
-                                            textAlign: TextAlign.start,
-                                            fontWeight:
-                                                FontWeightManager.regular,
-                                            fontSize: FontSize.subTitleFontSize,
-                                            fontFamily:
-                                                FontsManager.fontFamilyPoppins,
-                                            color: ColorManager.blackColor,
-                                          ),
-                                          Txt(
-                                            text: event.name,
-                                            textAlign: TextAlign.start,
-                                            fontWeight: FontWeightManager.bold,
-                                            fontSize:
-                                                FontSize.titleFontSize * 0.7,
-                                            fontFamily:
-                                                FontsManager.fontFamilyPoppins,
-                                            color: ColorManager.blackColor,
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.end,
-                                            children: const [
-                                              Icon(Icons.favorite_border,
-                                                  color: ColorManager
-                                                      .primaryColor),
-                                              SizedBox(
-                                                width: 12,
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                    : ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: searchController.searchedEvents.length,
+                        itemBuilder: (context, index) {
+                          Event event = searchController.searchedEvents[index];
+                          return InkWell(
+                            onTap: () {
+                              showModalBottomSheet(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return CustomBottomSheet(event: event);
+                                  });
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: ColorManager.cardBackGroundColor,
                               ),
-                            );
-                          },
-                        ),
+                              margin: const EdgeInsets.symmetric(
+                                  vertical: MarginManager.marginXS),
+                              width: double.infinity,
+                              height: 120,
+                              child: Row(
+                                children: [
+                                  SizedBox(
+                                    width: 140,
+                                    height: 150,
+                                    child: Image.network(
+                                      event.posterUrl,
+                                      loadingBuilder: (BuildContext context,
+                                          Widget child,
+                                          ImageChunkEvent? loadingProgress) {
+                                        if (loadingProgress == null) {
+                                          return child;
+                                        }
+                                        return Center(
+                                          child: CircularProgressIndicator(
+                                            color: ColorManager.blackColor,
+                                            value: loadingProgress
+                                                        .expectedTotalBytes !=
+                                                    null
+                                                ? loadingProgress
+                                                        .cumulativeBytesLoaded /
+                                                    loadingProgress
+                                                        .expectedTotalBytes!
+                                                : null,
+                                          ),
+                                        );
+                                      },
+                                      errorBuilder: (BuildContext context,
+                                          Object exception,
+                                          StackTrace? stackTrace) {
+                                        return const Icon(Icons.error);
+                                      },
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 12,
+                                  ),
+                                  Flexible(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: [
+                                        Txt(
+                                          text:
+                                              '${event.startDate} at ${event.startTime}',
+                                          useOverflow: true,
+                                          textAlign: TextAlign.start,
+                                          fontWeight: FontWeightManager.regular,
+                                          fontSize: FontSize.subTitleFontSize,
+                                          fontFamily:
+                                              FontsManager.fontFamilyPoppins,
+                                          color: ColorManager.blackColor,
+                                        ),
+                                        Txt(
+                                          text: event.name,
+                                          textAlign: TextAlign.start,
+                                          fontWeight: FontWeightManager.bold,
+                                          fontSize:
+                                              FontSize.titleFontSize * 0.7,
+                                          fontFamily:
+                                              FontsManager.fontFamilyPoppins,
+                                          color: ColorManager.blackColor,
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: const [
+                                            Icon(Icons.favorite_border,
+                                                color:
+                                                    ColorManager.primaryColor),
+                                            SizedBox(
+                                              width: 12,
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
                       ),
               ],
             ),

@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:event_booking_app/models/user.dart';
 
 class Event {
   String id,
@@ -12,7 +11,6 @@ class Event {
       price,
       description,
       category;
-  List<User>? participants;
   String organizerId;
 
   Event({
@@ -27,7 +25,6 @@ class Event {
     required this.category,
     required this.organizerId,
     required this.description,
-    this.participants,
   });
 
   Map<String, dynamic> toJson() => {
@@ -40,24 +37,12 @@ class Event {
         "posterUrl": posterUrl,
         "price": price,
         "category": category,
-        "participants": participants?.map((e) => e.toJson()).toList(),
         "description": description,
         "organizerId": organizerId
       };
 
-  static Future<Event> fromSnap(DocumentSnapshot? snap) async {
-    if (snap == null) {
-      return Future.error('Document snapshot is null');
-    }
-
+  static Event fromSnap(DocumentSnapshot snap) {
     var snapshot = snap.data() as Map<String, dynamic>;
-
-    List<User>? participants;
-    if (snapshot["participants"] != null) {
-      participants = (snapshot["participants"] as List<dynamic>)
-          .map((e) => User.fromMap(e))
-          .toList();
-    }
 
     return Event(
       id: snapshot['id'],
@@ -69,7 +54,6 @@ class Event {
       posterUrl: snapshot['posterUrl'],
       price: snapshot['price'],
       category: snapshot['category'],
-      participants: participants,
       description: snapshot['description'],
       organizerId: snapshot['organizerId'],
     );

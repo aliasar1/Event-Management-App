@@ -1,3 +1,4 @@
+import 'package:event_booking_app/utils/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -116,7 +117,7 @@ class EventsAttendedScreen extends StatelessWidget {
                                         color: ColorManager.blackColor,
                                       ),
                                       Txt(
-                                        text: event.name,
+                                        text: event.name.capitalizeFirstOfEach,
                                         textAlign: TextAlign.start,
                                         fontWeight: FontWeightManager.bold,
                                         fontSize: FontSize.titleFontSize * 0.7,

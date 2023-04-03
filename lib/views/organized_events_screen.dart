@@ -55,7 +55,7 @@ class _EventsOrganizedScreenState extends State<EventsOrganizedScreen> {
                       );
                     } else {
                       return Obx(() {
-                        final events = eventController.myEvents;
+                        final events = eventController.organizedEvents;
                         if (events.isEmpty) {
                           return Center(
                             child: Container(
@@ -87,15 +87,14 @@ class _EventsOrganizedScreenState extends State<EventsOrganizedScreen> {
                           );
                         }
                         return ListView.builder(
-                          itemCount: eventController.myEvents.length,
+                          itemCount: eventController.organizedEvents.length,
                           itemBuilder: (ctx, i) {
-                            final event = eventController.myEvents[i];
+                            final event = eventController.organizedEvents[i];
                             return EventListCard(event: event);
                           },
                         );
                       });
                     }
-                    ;
                   }
                 },
               ),

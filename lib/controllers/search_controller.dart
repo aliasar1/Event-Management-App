@@ -9,6 +9,10 @@ class SearchController extends GetxController {
   List<Event> get searchedEvents => _searchedEvents.value;
 
   Future<void> searchEvent(String typedUser) async {
+    if (typedUser.isEmpty) {
+      _searchedEvents.value = [];
+      return;
+    }
     List<Event> retVal = [];
     QuerySnapshot query = await firestore
         .collection('events')

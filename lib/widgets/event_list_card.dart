@@ -1,4 +1,5 @@
 import 'package:event_booking_app/manager/font_manager.dart';
+import 'package:event_booking_app/utils/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -25,7 +26,6 @@ class EventListCard extends StatelessWidget {
         color: ColorManager.cardBackGroundColor,
       ),
       margin: const EdgeInsets.symmetric(vertical: MarginManager.marginXS),
-      color: ColorManager.cardBackGroundColor,
       width: double.infinity,
       height: 150,
       child: Row(
@@ -74,7 +74,7 @@ class EventListCard extends StatelessWidget {
                   color: ColorManager.blackColor,
                 ),
                 Txt(
-                  text: event.name,
+                  text: event.name.capitalizeFirstOfEach,
                   textAlign: TextAlign.start,
                   fontWeight: FontWeightManager.bold,
                   fontSize: FontSize.titleFontSize * 0.7,

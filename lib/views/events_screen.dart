@@ -1,4 +1,5 @@
 import 'package:event_booking_app/manager/color_manager.dart';
+import 'package:event_booking_app/utils/extensions.dart';
 import 'package:event_booking_app/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -34,7 +35,7 @@ class EventScreen extends StatelessWidget {
             ),
             Expanded(
               child: FutureBuilder<List<Event>>(
-                future: eventController.getEvents(),
+                future: eventController.getAllEvents(),
                 builder: (BuildContext context,
                     AsyncSnapshot<List<Event>> snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
@@ -78,8 +79,9 @@ class EventScreen extends StatelessWidget {
                                       loadingBuilder: (BuildContext context,
                                           Widget child,
                                           ImageChunkEvent? loadingProgress) {
-                                        if (loadingProgress == null)
+                                        if (loadingProgress == null) {
                                           return child;
+                                        }
                                         return Center(
                                           child: CircularProgressIndicator(
                                             color: ColorManager.blackColor,
@@ -124,7 +126,8 @@ class EventScreen extends StatelessWidget {
                                           color: ColorManager.blackColor,
                                         ),
                                         Txt(
-                                          text: event.name,
+                                          text:
+                                              event.name.capitalizeFirstOfEach,
                                           textAlign: TextAlign.start,
                                           fontWeight: FontWeightManager.bold,
                                           fontSize:
