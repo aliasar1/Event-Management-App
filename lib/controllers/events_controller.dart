@@ -9,11 +9,13 @@ import 'package:image_picker/image_picker.dart';
 import '../manager/color_manager.dart';
 import '../manager/firebase_constants.dart';
 import '../models/event.dart';
+import '../models/user.dart';
 import '../utils/utils.dart';
 import '../widgets/packages/dropdown_plus/src/dropdown.dart';
 
 class EventController extends GetxController {
   Rx<bool> isLoading = false.obs;
+  Rx<bool> isLoading2 = false.obs;
   final addFormKey = GlobalKey<FormState>();
 
   final Rx<File?> _pickedImage = Rx<File?>(null);
@@ -21,6 +23,7 @@ class EventController extends GetxController {
 
   RxList<Event> myEvents = <Event>[].obs;
   RxList<Event> allEvents = <Event>[].obs;
+  RxList<Event> registeredEvents = <Event>[].obs;
 
   final nameController = TextEditingController();
   final startDateController = TextEditingController();
@@ -28,6 +31,7 @@ class EventController extends GetxController {
   final startTimeController = TextEditingController();
   final endTimeController = TextEditingController();
   final priceController = TextEditingController();
+  final descriptionController = TextEditingController();
   var categoryController = DropdownEditingController<String>();
 
   void toggleLoading({bool showMessage = false, String message = ''}) {
@@ -38,6 +42,10 @@ class EventController extends GetxController {
         isSuccess: false,
       );
     }
+  }
+
+  void toggleLoading2() {
+    isLoading.value = !isLoading.value;
   }
 
   Future<String> _uploadToStorage(File image) async {
@@ -68,7 +76,7 @@ class EventController extends GetxController {
   }
 
   void addEvent(String name, String startDate, String endDate, String startTime,
-      String endTime, String price, String category) async {
+      String endTime, String price, String category, String description) async {
     if (addFormKey.currentState!.validate()) {
       addFormKey.currentState!.save();
       toggleLoading();
@@ -86,6 +94,7 @@ class EventController extends GetxController {
         price: price,
         category: category,
         posterUrl: posterUrl,
+        description: description,
         participants: [],
         organizerId: firebaseAuth.currentUser!.uid,
       );
@@ -101,21 +110,65 @@ class EventController extends GetxController {
     }
   }
 
+  void addParticipantToEvent(dynamic userObj, String eventId) async {
+    try {
+      toggleLoading2();
+      User user;
+      if (userObj is User) {
+        user = userObj;
+      } else {
+        final docSnapshot =
+            await firestore.collection('users').doc(userObj.uid).get();
+        user = User.fromMap(docSnapshot.data()!);
+      }
+
+      final eventRef = firestore.collection('events').doc(eventId);
+      await eventRef.update({
+        'participants': FieldValue.arrayUnion([user.toJson()])
+      });
+      toggleLoading2();
+      Get.back();
+      Get.snackbar(
+        'Success!',
+        'You have successfully registered to attend the event.',
+      );
+    } catch (e) {
+      toggleLoading2();
+      Get.snackbar(
+        'Failure!',
+        'Failed to register in event.',
+      );
+    }
+  }
+
   Future<List<Event>> getEventsOrganized() async {
     try {
       QuerySnapshot snapshot = await firestore
           .collection('events')
           .where('organizerId', isEqualTo: firebaseAuth.currentUser!.uid)
           .get();
-      List<Future<Event>> futures =
-          snapshot.docs.map((doc) => Event.fromSnap(doc)).toList();
-      List<Event> events = await Future.wait(futures);
-      myEvents = RxList<Event>.from(events.toList());
+      List<Future<Event>> futures = [];
+      futures = snapshot.docs.map((doc) => Event.fromSnap(doc)).toList();
+
+      List<Event> events = [];
+
+      for (var future in futures) {
+        try {
+          var event = await future;
+          events.add(event);
+        } catch (e) {
+          Get.snackbar(
+            'Error!',
+            'Error fetching event details: $e',
+          );
+        }
+      }
+      allEvents = RxList<Event>.from(events.toList());
       return events;
     } catch (e) {
       Get.snackbar(
         'Error!',
-        'Error fetching event details.',
+        'Error fetching event details: $e',
       );
       return [];
     }
@@ -169,17 +222,94 @@ class EventController extends GetxController {
   Future<List<Event>> getEvents() async {
     try {
       QuerySnapshot snapshot = await firestore.collection('events').get();
-      List<Future<Event>> futures =
-          snapshot.docs.map((doc) => Event.fromSnap(doc)).toList();
-      List<Event> events = await Future.wait(futures);
+      List<Future<Event>> futures = [];
+      futures = snapshot.docs.map((doc) => Event.fromSnap(doc)).toList();
+
+      List<Event> events = [];
+
+      for (var future in futures) {
+        try {
+          var event = await future;
+          events.add(event);
+        } catch (e) {
+          Get.snackbar(
+            'Error!',
+            'Error fetching event details: $e',
+          );
+        }
+      }
       allEvents = RxList<Event>.from(events.toList());
-      return events; // return the list of Event objects
+      return events;
     } catch (e) {
       Get.snackbar(
         'Error!',
-        'Error fetching event detaisl.',
+        'Error fetching event details: $e',
       );
-      return []; // return an empty list instead of null
+      return [];
+    }
+  }
+
+  // Future<List<Event>> getRegisteredEvents() async {
+  //   try {
+  //     QuerySnapshot snapshot = await firestore.collection('events').get();
+  //     List<Future<Event>> futures = [];
+  //     futures = snapshot.docs.map((doc) => Event.fromSnap(doc)).toList();
+
+  //     List<Event> events = [];
+
+  //     for (var future in futures) {
+  //       try {
+  //         var event = await future;
+  //         events.add(event);
+  //       } catch (e) {
+  //         Get.snackbar(
+  //           'Error!',
+  //           'Error fetching event details: $e',
+  //         );
+  //       }
+  //     }
+  //     allEvents = RxList<Event>.from(events.toList());
+  //     return events;
+  //   } catch (e) {
+  //     Get.snackbar(
+  //       'Error!',
+  //       'Error fetching event details: $e',
+  //     );
+  //     return [];
+  //   }
+  // }
+
+  Future<List<Event>> getAttendedEvents() async {
+    try {
+      print(firebaseAuth.currentUser!.uid);
+      QuerySnapshot snapshot = await firestore.collection('events').where(
+          'participants',
+          arrayContains: {'uid': firebaseAuth.currentUser!.uid}).get();
+
+      print(snapshot.docs.length);
+      print("here");
+      List<Future<Event>> futures = [];
+      futures = snapshot.docs.map((doc) => Event.fromSnap(doc)).toList();
+      print(futures.length);
+      for (var future in futures) {
+        try {
+          var event = await future;
+          registeredEvents.add(event);
+        } catch (e) {
+          Get.snackbar(
+            'Error!',
+            'Error fetching event details: $e',
+          );
+        }
+      }
+      registeredEvents = RxList<Event>.from(registeredEvents.toList());
+      return registeredEvents;
+    } catch (e) {
+      Get.snackbar(
+        'Error!',
+        'Error fetching event details: $e',
+      );
+      return [];
     }
   }
 
@@ -190,6 +320,7 @@ class EventController extends GetxController {
     startTimeController.clear();
     endTimeController.clear();
     priceController.clear();
+    descriptionController.clear();
     categoryController.dispose();
     categoryController = DropdownEditingController<String>();
     _pickedImage.value = null;

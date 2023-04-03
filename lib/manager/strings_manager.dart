@@ -10,8 +10,11 @@ class StringsManager {
   static const String offlineTxt = "You're Offline.";
   static const String searchEventTxt = "Search Event";
   static const String searchNowEventTxt = "Search Events Now!";
-
+  static const String descriptionTxt = 'Description';
+  static const String registerNowTxt = 'Register Now';
   static const String noEventTxt = "No event found!";
+  static const String eventsHistoryTxt = "Events Attended";
+  static const String eventsNoHistoryTxt = "No Events Attended!";
   static const String offlineMsgTxt =
       "No Internet Connection. Make sure that Wifi or Mobile data is turned on, then try again.";
   static const String openWifiTxt = "Open Wifi Settings";
@@ -30,7 +33,7 @@ class StringsManager {
   static const String priceTxt = 'Event Fee';
   static const String myEventsTxt = 'My Events';
   static const String noEventsTxt = "You haven't organized any event!";
-  static const String ongoingEventsTxt = "Ongoing Events";
+  static const String ongoingEventsTxt = "Upcoming Events";
   // Hint Text
   static const String emailHintTxt = 'abc@gmail.com';
   static const String phoneHintTxt = '0331XXXXXXX';
@@ -43,6 +46,7 @@ class ErrorManager {
   static const String kFieldEmptyError = 'Please Enter a Value';
   static const String kEmailNullError = 'Please Enter a Valid Email';
   static const String kPhoneNullError = 'Please Enter a Phone Number';
+  static const String kDescriptionNullError = 'Please enter description';
 
   static const String kPasswordNullError = 'Please Enter a Password';
   static const String kPasswordNotMatchingError = 'Passwords do not Match';

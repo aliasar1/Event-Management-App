@@ -1,4 +1,3 @@
-import 'package:event_booking_app/utils/size_config.dart';
 import 'package:event_booking_app/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -138,6 +137,24 @@ class AddEventScreen extends StatelessWidget {
               validator: (value) {
                 if (value!.isEmpty) {
                   return ErrorManager.kEventNameNullError;
+                }
+                return null;
+              },
+            ),
+            const SizedBox(
+              height: 12,
+            ),
+            CustomTextFormField(
+              controller: eventController.descriptionController,
+              labelText: StringsManager.descriptionTxt,
+              prefixIconData: Icons.description,
+              maxLength: 50,
+              maxLines: 1,
+              textInputAction: TextInputAction.next,
+              autofocus: false,
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return ErrorManager.kDescriptionNullError;
                 }
                 return null;
               },
@@ -436,6 +453,7 @@ class AddEventScreen extends StatelessWidget {
                       eventController.startTimeController.text,
                       eventController.endTimeController.text,
                       eventController.priceController.text.trim(),
+                      eventController.descriptionController.text.trim(),
                       eventController.categoryController.value!);
                 },
                 text: "Add",

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../manager/color_manager.dart';
+import 'events_attended_history.dart';
 import 'profile_view.dart';
 import 'search_screen.dart';
 
@@ -76,7 +77,7 @@ class _ParticipantHomeScreenState extends State<ParticipantHomeScreen> {
 }
 
 var participantPages = [
-  Text('abc'),
+  EventsAttendedScreen(),
   SearchScreen(),
   EventScreen(),
   Text('Favs'),

@@ -19,8 +19,7 @@ class User {
         "phone": phone,
       };
 
-  static User fromSnap(DocumentSnapshot snap) {
-    var snapshot = snap.data() as Map<String, dynamic>;
+  static User fromMap(Map<String, dynamic> snapshot) {
     return User(
       email: snapshot["email"],
       name: snapshot["name"],

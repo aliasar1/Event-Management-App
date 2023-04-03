@@ -10,6 +10,7 @@ class Event {
       endTime,
       posterUrl,
       price,
+      description,
       category;
   List<User>? participants;
   String organizerId;
@@ -25,6 +26,7 @@ class Event {
     required this.price,
     required this.category,
     required this.organizerId,
+    required this.description,
     this.participants,
   });
 
@@ -38,19 +40,23 @@ class Event {
         "posterUrl": posterUrl,
         "price": price,
         "category": category,
-        "participants": participants,
+        "participants": participants?.map((e) => e.toJson()).toList(),
+        "description": description,
         "organizerId": organizerId
       };
 
-  static Future<Event> fromSnap(DocumentSnapshot snap) async {
+  static Future<Event> fromSnap(DocumentSnapshot? snap) async {
+    if (snap == null) {
+      return Future.error('Document snapshot is null');
+    }
+
     var snapshot = snap.data() as Map<String, dynamic>;
 
-    List<String> participantIds = List<String>.from(snapshot['participants']);
-    List<User> participants = [];
-    for (String id in participantIds) {
-      DocumentSnapshot userSnap =
-          await FirebaseFirestore.instance.collection('users').doc(id).get();
-      participants.add(User.fromSnap(userSnap));
+    List<User>? participants;
+    if (snapshot["participants"] != null) {
+      participants = (snapshot["participants"] as List<dynamic>)
+          .map((e) => User.fromMap(e))
+          .toList();
     }
 
     return Event(
@@ -64,6 +70,7 @@ class Event {
       price: snapshot['price'],
       category: snapshot['category'],
       participants: participants,
+      description: snapshot['description'],
       organizerId: snapshot['organizerId'],
     );
   }

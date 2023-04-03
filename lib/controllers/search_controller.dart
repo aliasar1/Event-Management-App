@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 
 class SearchController extends GetxController {
   final Rx<List<Event>> _searchedEvents = Rx<List<Event>>([]);
-  RxBool isInit = false.obs;
 
   List<Event> get searchedEvents => _searchedEvents.value;
 
@@ -15,13 +14,19 @@ class SearchController extends GetxController {
         .collection('events')
         .where('name', isGreaterThanOrEqualTo: typedUser.toLowerCase())
         .get();
-    for (var elem in query.docs) {
-      Event event = await Event.fromSnap(elem);
-      if (event.name.toLowerCase().contains(typedUser.toLowerCase())) {
-        retVal.add(event);
+    if (query.docs.isEmpty) {
+      Get.snackbar(
+        'Event not found!',
+        'The event does not exist.',
+      );
+    } else {
+      for (var elem in query.docs) {
+        Event event = await Event.fromSnap(elem);
+        if (event.name.toLowerCase().contains(typedUser.toLowerCase())) {
+          retVal.add(event);
+        }
       }
     }
-    isInit.value = !isInit.value;
     _searchedEvents.value = retVal;
   }
 }
