@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 
 import '../manager/color_manager.dart';
 import 'events_attended_history.dart';
+import 'fav_events_screen.dart';
 import 'profile_view.dart';
 import 'search_screen.dart';
 
@@ -80,6 +81,6 @@ var participantPages = [
   EventsAttendedScreen(),
   SearchScreen(),
   EventScreen(),
-  Text('Favs'),
+  FavouriteEventScreen(),
   ProfileView(),
 ];

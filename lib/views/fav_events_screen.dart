@@ -1,69 +1,49 @@
-import 'package:event_booking_app/manager/color_manager.dart';
 import 'package:event_booking_app/utils/extensions.dart';
-import 'package:event_booking_app/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../controllers/events_controller.dart';
+import '../manager/color_manager.dart';
 import '../manager/font_manager.dart';
 import '../manager/strings_manager.dart';
 import '../manager/values_manager.dart';
 import '../models/event.dart';
 import '../widgets/custom_bottom_sheet.dart';
+import '../widgets/custom_text.dart';
 import '../widgets/fav_icon.dart';
 
-class EventScreen extends StatefulWidget {
-  @override
-  State<EventScreen> createState() => _EventScreenState();
-}
+class FavouriteEventScreen extends StatelessWidget {
+  FavouriteEventScreen({super.key});
 
-class _EventScreenState extends State<EventScreen> {
   final eventController = Get.put(EventController());
-
-  @override
-  void dispose() {
-    Get.delete<EventController>();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorManager.scaffoldBackgroundColor,
       body: Container(
-        margin: const EdgeInsets.symmetric(horizontal: MarginManager.marginM),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Txt(
-              textAlign: TextAlign.start,
-              text: StringsManager.ongoingEventsTxt,
-              fontWeight: FontWeightManager.bold,
-              fontSize: FontSize.headerFontSize,
-              fontFamily: FontsManager.fontFamilyPoppins,
-            ),
-            const SizedBox(
-              height: 12,
-            ),
-            Expanded(
-              child: FutureBuilder<List<Event>>(
-                future: eventController.getAllEvents(),
+          margin: const EdgeInsets.symmetric(horizontal: MarginManager.marginM),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Txt(
+                textAlign: TextAlign.start,
+                text: StringsManager.favouriteTxt,
+                fontWeight: FontWeightManager.bold,
+                fontSize: FontSize.headerFontSize,
+                fontFamily: FontsManager.fontFamilyPoppins,
+              ),
+              const SizedBox(
+                height: 12,
+              ),
+              StreamBuilder<List<Event>>(
+                stream: eventController.getUserFavEvents(),
                 builder: (BuildContext context,
                     AsyncSnapshot<List<Event>> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: CircularProgressIndicator(
-                        color: ColorManager.blackColor,
-                      ),
-                    );
-                  } else {
-                    if (snapshot.hasError) {
-                      return Center(
-                        child: Text('Error: ${snapshot.error}'),
-                      );
-                    } else {
-                      final events = snapshot.data;
-                      return ListView.builder(
+                  if (snapshot.hasData) {
+                    final events = snapshot.data;
+                    return Expanded(
+                      child: ListView.builder(
                         itemCount: events?.length ?? 0,
                         itemBuilder: (ctx, i) {
                           final event = events![i];
@@ -175,15 +155,21 @@ class _EventScreenState extends State<EventScreen> {
                             ),
                           );
                         },
-                      );
-                    }
+                      ),
+                    );
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  } else {
+                    return const Center(
+                      child: CircularProgressIndicator(
+                        color: ColorManager.blackColor,
+                      ),
+                    );
                   }
                 },
               ),
-            ),
-          ],
-        ),
-      ),
+            ],
+          )),
     );
   }
 }

@@ -25,6 +25,7 @@ class EventController extends GetxController {
   RxList<Event> organizedEvents = <Event>[].obs;
   RxList<Event> allEvents = <Event>[].obs;
   RxList<Event> attendedEvents = <Event>[].obs;
+  RxList<Event> favoriteEvents = <Event>[].obs;
 
   final nameController = TextEditingController();
   final startDateController = TextEditingController();
@@ -272,14 +273,68 @@ class EventController extends GetxController {
     }
   }
 
+  Future<List<String>> getAllEventIds() async {
+    CollectionReference eventsRef = firestore.collection('events');
+    QuerySnapshot<Object?> querySnapshot = await eventsRef.get();
+    List<String> eventIds = querySnapshot.docs.map((doc) => doc.id).toList();
+    return eventIds;
+  }
+
+  Future<Event?> getEventById(String eventId) async {
+    DocumentSnapshot eventSnapshot = await FirebaseFirestore.instance
+        .collection('events')
+        .doc(eventId)
+        .get();
+
+    if (eventSnapshot.exists) {
+      return Event.fromSnap(eventSnapshot);
+    } else {
+      return null;
+    }
+  }
+
+  Stream<List<Event>> getUserFavEvents() async* {
+    List<String> eventIds = await getAllEventIds();
+    List<Event> events = [];
+    for (var i in eventIds) {
+      if (await isEventFavorite(i)) {
+        Event? event = await getEventById(i);
+        events.add(event!);
+      }
+    }
+    yield events;
+  }
+
+  Future<List<Event>> getEventsByIds(List<String> eventIds) {
+    CollectionReference eventsRef = firestore.collection('events');
+    Query eventsQuery =
+        eventsRef.where(FieldPath.documentId, whereIn: eventIds);
+    return eventsQuery.get().then((querySnapshot) =>
+        querySnapshot.docs.map((doc) => Event.fromSnap(doc)).toList());
+  }
+
+  Future<bool> isEventFavorite(String eventId) async {
+    try {
+      DocumentSnapshot snapshot = await firestore
+          .collection('events')
+          .doc(eventId)
+          .collection('favourite')
+          .doc(firebaseAuth.currentUser!.uid)
+          .get();
+      return snapshot.exists && snapshot.get('isFav') == true;
+    } catch (e) {
+      print('Error checking if event is favorite: $e');
+      return false;
+    }
+  }
+
   Future<bool> getFavStatus(String id) async {
     QuerySnapshot<Map<String, dynamic>> snap = await firestore
         .collection('events')
         .doc(id)
-        .collection('participants')
+        .collection('favourite')
         .where('uid', isEqualTo: firebaseAuth.currentUser!.uid)
         .get();
-
     if (snap.docs.isNotEmpty) {
       Map<String, dynamic> data = snap.docs.first.data();
       return data['isFav'] ?? false;

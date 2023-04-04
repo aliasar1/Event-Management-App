@@ -14,6 +14,7 @@ class StringsManager {
   static const String registerNowTxt = 'Register Now';
   static const String noEventTxt = "No event found!";
   static const String eventsHistoryTxt = "Events Attended";
+  static const String favouriteTxt = "Favourite Events";
   static const String eventsNoHistoryTxt = "No Events Attended!";
   static const String offlineMsgTxt =
       "No Internet Connection. Make sure that Wifi or Mobile data is turned on, then try again.";

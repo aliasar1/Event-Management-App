@@ -1,5 +1,6 @@
 import 'package:event_booking_app/models/event.dart';
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 
 import '../controllers/events_controller.dart';
 
@@ -18,8 +19,8 @@ class _FavoriteIconState extends State<FavoriteIcon> {
 
   @override
   void initState() {
-    super.initState();
     _getFavStatus();
+    super.initState();
   }
 
   void _getFavStatus() async {
