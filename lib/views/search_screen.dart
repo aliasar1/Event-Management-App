@@ -11,7 +11,6 @@ import '../manager/strings_manager.dart';
 import '../manager/values_manager.dart';
 import '../models/event.dart';
 import '../widgets/custom_bottom_sheet.dart';
-import '../widgets/custom_button.dart';
 import '../widgets/custom_search.dart';
 import '../widgets/custom_text.dart';
 

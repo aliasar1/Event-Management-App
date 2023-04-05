@@ -1,5 +1,6 @@
 import 'package:event_booking_app/utils/extensions.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../controllers/events_controller.dart';
@@ -13,7 +14,7 @@ import '../widgets/custom_text.dart';
 import '../widgets/fav_icon.dart';
 
 class FavouriteEventScreen extends StatelessWidget {
-  FavouriteEventScreen({super.key});
+  FavouriteEventScreen({Key? key});
 
   final eventController = Get.put(EventController());
 
@@ -36,14 +37,42 @@ class FavouriteEventScreen extends StatelessWidget {
               const SizedBox(
                 height: 12,
               ),
-              StreamBuilder<List<Event>>(
-                stream: eventController.getUserFavEvents(),
-                builder: (BuildContext context,
-                    AsyncSnapshot<List<Event>> snapshot) {
-                  if (snapshot.hasData) {
-                    final events = snapshot.data;
-                    return Expanded(
-                      child: ListView.builder(
+              Flexible(
+                child: StreamBuilder<List<Event>>(
+                  stream: eventController.getUserFavEvents(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<List<Event>> snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done &&
+                        snapshot.data!.isEmpty) {
+                      return Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              height: SizeManager.svgImageSize,
+                              width: SizeManager.svgImageSize,
+                              child: SvgPicture.asset(
+                                'assets/images/favourite.svg',
+                                fit: BoxFit.scaleDown,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            const Txt(
+                              textAlign: TextAlign.center,
+                              text: StringsManager.markFavTxt,
+                              fontWeight: FontWeightManager.bold,
+                              fontSize: FontSize.titleFontSize,
+                              fontFamily: FontsManager.fontFamilyPoppins,
+                            ),
+                          ],
+                        ),
+                      );
+                    } else if (snapshot.hasData) {
+                      final events = snapshot.data;
+                      return ListView.builder(
                         itemCount: events?.length ?? 0,
                         itemBuilder: (ctx, i) {
                           final event = events![i];
@@ -155,18 +184,18 @@ class FavouriteEventScreen extends StatelessWidget {
                             ),
                           );
                         },
-                      ),
-                    );
-                  } else if (snapshot.hasError) {
-                    return Center(child: Text('Error: ${snapshot.error}'));
-                  } else {
-                    return const Center(
-                      child: CircularProgressIndicator(
-                        color: ColorManager.blackColor,
-                      ),
-                    );
-                  }
-                },
+                      );
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text('Error: ${snapshot.error}'));
+                    } else {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: ColorManager.blackColor,
+                        ),
+                      );
+                    }
+                  },
+                ),
               ),
             ],
           )),

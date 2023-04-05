@@ -16,6 +16,7 @@ class StringsManager {
   static const String eventsHistoryTxt = "Events Attended";
   static const String favouriteTxt = "Favourite Events";
   static const String eventsNoHistoryTxt = "No Events Attended!";
+  static const String markFavTxt = "No Events Marked As Favourite!";
   static const String offlineMsgTxt =
       "No Internet Connection. Make sure that Wifi or Mobile data is turned on, then try again.";
   static const String openWifiTxt = "Open Wifi Settings";
