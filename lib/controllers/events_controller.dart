@@ -186,6 +186,17 @@ class EventController extends GetxController {
     }
   }
 
+  Future<String> showEventQr(Event event) async {
+    final participantRef = firestore
+        .collection('events')
+        .doc(event.id)
+        .collection('participants')
+        .doc(firebaseAuth.currentUser!.uid);
+    final docSnapshot = await participantRef.get();
+    final participantData = docSnapshot.data();
+    return participantData!['qrCode'];
+  }
+
   void removeParticipantFromEvent(String participantId, String eventId) async {
     try {
       final participantRef = firestore

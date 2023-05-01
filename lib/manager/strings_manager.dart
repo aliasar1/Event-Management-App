@@ -10,6 +10,7 @@ class StringsManager {
   static const String offlineTxt = "You're Offline.";
   static const String searchEventTxt = "Search Event";
   static const String searchNowEventTxt = "Search Events Now!";
+  static const String noEventsAttendedTxt = "Events Log is empty!";
   static const String descriptionTxt = 'Description';
   static const String registerNowTxt = 'Register Now';
   static const String noEventTxt = "No event found!";
