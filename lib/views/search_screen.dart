@@ -11,6 +11,7 @@ import '../models/event.dart';
 import '../widgets/custom_bottom_sheet.dart';
 import '../widgets/custom_search.dart';
 import '../widgets/custom_text.dart';
+import '../widgets/fav_icon.dart';
 
 class SearchScreen extends StatefulWidget {
   SearchScreen({super.key});
@@ -171,11 +172,12 @@ class _SearchScreenState extends State<SearchScreen> {
                                         Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.end,
-                                          children: const [
-                                            Icon(Icons.favorite_border,
-                                                color:
-                                                    ColorManager.primaryColor),
-                                            SizedBox(
+                                          children: [
+                                            FavoriteIcon(
+                                              event: event,
+                                              eventController: eventController,
+                                            ),
+                                            const SizedBox(
                                               width: 12,
                                             ),
                                           ],

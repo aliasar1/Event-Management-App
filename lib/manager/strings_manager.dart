@@ -14,6 +14,7 @@ class StringsManager {
   static const String registerNowTxt = 'Register Now';
   static const String noEventTxt = "No event found!";
   static const String eventsHistoryTxt = "Events Attended";
+  static const String eventsLogTxt = "Events Log";
   static const String favouriteTxt = "Favourite Events";
   static const String eventsNoHistoryTxt = "No Events Attended!";
   static const String markFavTxt = "No Events Marked As Favourite!";

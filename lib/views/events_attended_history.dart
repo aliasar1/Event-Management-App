@@ -9,6 +9,7 @@ import '../manager/strings_manager.dart';
 import '../manager/values_manager.dart';
 import '../models/event.dart';
 import '../widgets/custom_text.dart';
+import '../widgets/fav_icon.dart';
 
 class EventsAttendedScreen extends StatelessWidget {
   EventsAttendedScreen({super.key});
@@ -26,7 +27,7 @@ class EventsAttendedScreen extends StatelessWidget {
           children: [
             const Txt(
               textAlign: TextAlign.start,
-              text: StringsManager.eventsHistoryTxt,
+              text: StringsManager.eventsLogTxt,
               fontWeight: FontWeightManager.bold,
               fontSize: FontSize.headerFontSize,
               fontFamily: FontsManager.fontFamilyPoppins,
@@ -128,15 +129,21 @@ class EventsAttendedScreen extends StatelessWidget {
                                       Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.end,
-                                        children: const [
-                                          Icon(Icons.favorite_border,
-                                              color: ColorManager.primaryColor),
-                                          SizedBox(
+                                        children: [
+                                          FavoriteIcon(
+                                            event: event,
+                                            eventController: eventController,
+                                          ),
+                                          const SizedBox(
                                             width: 12,
                                           ),
-                                          Icon(Icons.calendar_month,
-                                              color: ColorManager.primaryColor),
-                                          SizedBox(
+                                          InkWell(
+                                            onTap: () {},
+                                            child: const Icon(Icons.qr_code,
+                                                color:
+                                                    ColorManager.primaryColor),
+                                          ),
+                                          const SizedBox(
                                             width: 12,
                                           ),
                                         ],

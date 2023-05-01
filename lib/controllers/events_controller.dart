@@ -1,10 +1,14 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+import 'package:image/image.dart' as img;
 
 import '../manager/color_manager.dart';
 import '../manager/firebase_constants.dart';
@@ -52,7 +56,7 @@ class EventController extends GetxController {
 
   Future<String> _uploadToStorage(File image) async {
     String id = await getUniqueId();
-    Reference ref = firebaseStorage.ref().child('eventPoster').child(id);
+    Reference ref = firebaseStorage.ref().child('qrCodes').child(id);
 
     UploadTask uploadTask = ref.putFile(image);
     TaskSnapshot snap = await uploadTask;
@@ -111,7 +115,50 @@ class EventController extends GetxController {
     }
   }
 
-  void addParticipantToEvent(dynamic userObj, String eventId) async {
+  Future<void> generateAndSaveQrCode(User user, String eventId) async {
+    try {
+      // Generate QR code data
+      final qrData = user.toJson().toString();
+      final qrImage = await QrPainter(
+        data: qrData,
+        version: QrVersions.auto,
+        gapless: false,
+        color: Colors.black,
+        emptyColor: Colors.white,
+      ).toImage(300);
+
+      // Convert QR image to bytes
+      final pngBytes = await qrImage.toByteData(format: ImageByteFormat.png);
+      final pngBytesList = pngBytes!.buffer.asUint8List();
+
+      // Upload QR image to Firebase Storage
+      final ref = firebaseStorage
+          .ref()
+          .child('qrCodes')
+          .child(eventId)
+          .child(firebaseAuth.currentUser!.uid);
+      final uploadTask = await ref.putData(pngBytesList);
+      final downloadUrl = await uploadTask.ref.getDownloadURL();
+      final participantRef = firestore
+          .collection('events')
+          .doc(eventId)
+          .collection('participants')
+          .doc(firebaseAuth.currentUser!.uid);
+      await participantRef.set(
+        {
+          ...user.toJson(),
+          'qrCode': downloadUrl,
+        },
+      );
+    } catch (e) {
+      Get.snackbar(
+        'Failure!',
+        'Failed to register in event.',
+      );
+    }
+  }
+
+  Future<void> addParticipantToEvent(dynamic userObj, String eventId) async {
     try {
       toggleLoading2();
       User user;
@@ -122,12 +169,8 @@ class EventController extends GetxController {
             await firestore.collection('users').doc(userObj.uid).get();
         user = User.fromMap(docSnapshot);
       }
-      await firestore
-          .collection('events')
-          .doc(eventId)
-          .collection('participants')
-          .doc(firebaseAuth.currentUser!.uid)
-          .set(user.toJson());
+
+      generateAndSaveQrCode(user, eventId);
       toggleLoading2();
       Get.back();
       Get.snackbar(
