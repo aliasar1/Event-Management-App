@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 
@@ -5,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -148,12 +150,41 @@ class EventController extends GetxController {
         {
           ...user.toJson(),
           'qrCode': downloadUrl,
+          'haveAttended': false,
         },
       );
     } catch (e) {
       Get.snackbar(
         'Failure!',
         'Failed to register in event.',
+      );
+    }
+  }
+
+  void scanQRCode(String eventId) async {
+    try {
+      final qrCode = await FlutterBarcodeScanner.scanBarcode(
+          '#ff6666', 'Cancel', true, ScanMode.QR);
+
+      final data = jsonDecode(qrCode) as Map<String, dynamic>;
+      final participantRef = firestore
+          .collection('events')
+          .doc(eventId)
+          .collection('participants')
+          .doc(data['uid']);
+      await participantRef.update({
+        'haveAttended': true,
+      }).then((value) => {
+            Get.snackbar(
+              'Success!',
+              'Your presence in event is recorded.',
+            ),
+          });
+      Get.back();
+    } on PlatformException {
+      Get.snackbar(
+        'Failure!',
+        'Error occured when scanning.',
       );
     }
   }
@@ -460,6 +491,40 @@ class EventController extends GetxController {
         'Error marking event as favourite.',
       );
     }
+  }
+
+  Future<List<Map<String, dynamic>>> getUserPresence(String eventId) async {
+    final querySnapshot = await firestore
+        .collection('events')
+        .doc(eventId)
+        .collection('participants')
+        .get();
+
+    final participantList = querySnapshot.docs.map((doc) {
+      final data = doc.data();
+      return {'uid': data['uid'], 'haveAttended': data['haveAttended']};
+    }).toList();
+
+    return participantList;
+  }
+
+  Future<List<User>> getAllEventParticipants(String eventId) async {
+    final participantRef =
+        firestore.collection('events').doc(eventId).collection('participants');
+
+    final participantSnapshot = await participantRef.get();
+
+    final participantList = <User>[];
+
+    if (participantSnapshot.docs.isEmpty) {
+      return participantList;
+    }
+
+    for (final participantDoc in participantSnapshot.docs) {
+      final participant = User.fromMap(participantDoc);
+      participantList.add(participant);
+    }
+    return participantList;
   }
 
   void resetFields() {

@@ -8,6 +8,7 @@ import '../manager/font_manager.dart';
 import '../manager/strings_manager.dart';
 import '../manager/values_manager.dart';
 import '../models/event.dart';
+import '../widgets/custom_bottom_sheet.dart';
 import '../widgets/custom_text.dart';
 import '../widgets/event_list_card.dart';
 
@@ -90,7 +91,15 @@ class _EventsOrganizedScreenState extends State<EventsOrganizedScreen> {
                           itemCount: eventController.organizedEvents.length,
                           itemBuilder: (ctx, i) {
                             final event = eventController.organizedEvents[i];
-                            return EventListCard(event: event);
+                            return InkWell(
+                                onTap: () {
+                                  showModalBottomSheet(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return CustomBottomSheet(event: event);
+                                      });
+                                },
+                                child: EventListCard(event: event));
                           },
                         );
                       });

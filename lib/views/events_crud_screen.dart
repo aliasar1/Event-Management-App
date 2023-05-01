@@ -437,8 +437,8 @@ class AddEventScreen extends StatelessWidget {
                       eventController.startTimeController.text,
                       eventController.endTimeController.text,
                       eventController.priceController.text.trim(),
-                      eventController.descriptionController.text.trim(),
-                      eventController.categoryController.value!);
+                      eventController.categoryController.value!,
+                      eventController.descriptionController.text.trim());
                 },
                 text: "Add",
                 hasInfiniteWidth: true,

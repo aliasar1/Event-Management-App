@@ -168,31 +168,43 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
             const SizedBox(
               height: 6,
             ),
-            Obx(
-              () => CustomButton(
-                color: ColorManager.blackColor,
-                hasInfiniteWidth: true,
-                buttonType: ButtonType.loading,
-                loadingWidget: eventController.isLoading2.value
-                    ? const Center(
-                        child: CircularProgressIndicator(
-                          color: Colors.white,
-                          backgroundColor: ColorManager.scaffoldBackgroundColor,
-                        ),
-                      )
-                    : null,
-                onPressed: () {
-                  isRegistered
-                      ? eventController.removeParticipantFromEvent(
-                          firebaseAuth.currentUser!.uid, widget.event.id)
-                      : eventController.addParticipantToEvent(
-                          firebaseAuth.currentUser!, widget.event.id);
-                },
-                text:
-                    isRegistered ? "Deregister" : StringsManager.registerNowTxt,
-                textColor: ColorManager.backgroundColor,
-              ),
-            ),
+            widget.event.organizerId == firebaseAuth.currentUser!.uid
+                ? const Center(
+                    child: Chip(
+                      label: Txt(
+                        text: "You are organizer of this event.",
+                        color: Colors.white,
+                      ),
+                      backgroundColor: ColorManager.primaryColor,
+                    ),
+                  )
+                : Obx(
+                    () => CustomButton(
+                      color: ColorManager.blackColor,
+                      hasInfiniteWidth: true,
+                      buttonType: ButtonType.loading,
+                      loadingWidget: eventController.isLoading2.value
+                          ? const Center(
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                backgroundColor:
+                                    ColorManager.scaffoldBackgroundColor,
+                              ),
+                            )
+                          : null,
+                      onPressed: () {
+                        isRegistered
+                            ? eventController.removeParticipantFromEvent(
+                                firebaseAuth.currentUser!.uid, widget.event.id)
+                            : eventController.addParticipantToEvent(
+                                firebaseAuth.currentUser!, widget.event.id);
+                      },
+                      text: isRegistered
+                          ? "Deregister"
+                          : StringsManager.registerNowTxt,
+                      textColor: ColorManager.backgroundColor,
+                    ),
+                  ),
           ],
         ),
       ),

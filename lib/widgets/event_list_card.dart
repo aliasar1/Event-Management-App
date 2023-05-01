@@ -1,4 +1,5 @@
 import 'package:event_booking_app/manager/font_manager.dart';
+import 'package:event_booking_app/models/user.dart';
 import 'package:event_booking_app/utils/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -82,22 +83,48 @@ class EventListCard extends StatelessWidget {
                   color: ColorManager.blackColor,
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Icon(Icons.favorite_border,
-                        color: ColorManager.primaryColor),
-                    const SizedBox(
-                      width: 12,
-                    ),
                     InkWell(
-                      onTap: () async {
-                        eventController.deleteEvent(event.id);
+                      onTap: () {
+                        eventController.scanQRCode(event.id);
                       },
-                      child: const Icon(Icons.delete,
-                          color: ColorManager.redColor),
+                      child: const Icon(
+                        Icons.qr_code_scanner,
+                      ),
                     ),
-                    const SizedBox(
-                      width: 12,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        InkWell(
+                          onTap: () async {
+                            final participants = await eventController
+                                .getAllEventParticipants(event.id);
+                            final presence =
+                                await eventController.getUserPresence(event.id);
+                            buildBottomParticipantSheet(
+                                context, participants, presence);
+                          },
+                          child: const Icon(
+                            Icons.groups_2_rounded,
+                            color: ColorManager.blackColor,
+                            size: 36,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 12,
+                        ),
+                        InkWell(
+                          onTap: () async {
+                            eventController.deleteEvent(event.id);
+                          },
+                          child: const Icon(Icons.delete,
+                              color: ColorManager.redColor),
+                        ),
+                        const SizedBox(
+                          width: 12,
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -106,6 +133,42 @@ class EventListCard extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Future<dynamic> buildBottomParticipantSheet(BuildContext context,
+      List<User> participants, List<Map<String, dynamic>> presence) {
+    return showModalBottomSheet(
+      context: context,
+      backgroundColor: ColorManager.scaffoldBackgroundColor,
+      builder: (BuildContext context) {
+        return SizedBox(
+          height: double.infinity,
+          child: ListView.builder(
+            itemCount: participants.length,
+            itemBuilder: (BuildContext context, int index) {
+              final participant = participants[index];
+              return ListTile(
+                title: Txt(
+                  text: participant.name,
+                  color: ColorManager.blackColor,
+                  fontWeight: FontWeightManager.bold,
+                  fontSize: FontSize.textFontSize,
+                ),
+                subtitle: Txt(
+                  text: participant.email,
+                  color: ColorManager.primaryLightColor,
+                  fontSize: FontSize.subTitleFontSize,
+                ),
+                trailing: presence.any(
+                        (p) => p['uid'] == participant.uid && p['haveAttended'])
+                    ? const Icon(Icons.check, color: Colors.green)
+                    : const Icon(Icons.close, color: Colors.red),
+              );
+            },
+          ),
+        );
+      },
     );
   }
 }

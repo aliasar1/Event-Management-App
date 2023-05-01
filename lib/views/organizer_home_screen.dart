@@ -1,5 +1,6 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:event_booking_app/controllers/auth_controller.dart';
+import 'package:event_booking_app/views/qrcode_scanner.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -76,6 +77,6 @@ class _OrganizerHomeScreenState extends State<OrganizerHomeScreen> {
 var pages = [
   EventsOrganizedScreen(),
   AddEventScreen(),
-  Text('abc'),
+  QrCodeScanner(),
   ProfileView(),
 ];

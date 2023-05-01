@@ -1,4 +1,5 @@
 import 'package:event_booking_app/manager/color_manager.dart';
+import 'package:event_booking_app/manager/firebase_constants.dart';
 import 'package:event_booking_app/utils/extensions.dart';
 import 'package:event_booking_app/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
@@ -148,25 +149,37 @@ class _EventScreenState extends State<EventScreen> {
                                               FontsManager.fontFamilyPoppins,
                                           color: ColorManager.blackColor,
                                         ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          children: [
-                                            FavoriteIcon(
-                                              event: event,
-                                              eventController: eventController,
-                                            ),
-                                            const SizedBox(
-                                              width: 12,
-                                            ),
-                                            const Icon(Icons.calendar_month,
-                                                color:
-                                                    ColorManager.primaryColor),
-                                            const SizedBox(
-                                              width: 12,
-                                            ),
-                                          ],
-                                        )
+                                        event.organizerId ==
+                                                firebaseAuth.currentUser!.uid
+                                            ? const Chip(
+                                                label: Txt(
+                                                  text: "Organizer",
+                                                  color: Colors.white,
+                                                ),
+                                                backgroundColor:
+                                                    ColorManager.primaryColor,
+                                              )
+                                            : Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                children: [
+                                                  FavoriteIcon(
+                                                    event: event,
+                                                    eventController:
+                                                        eventController,
+                                                  ),
+                                                  const SizedBox(
+                                                    width: 12,
+                                                  ),
+                                                  const Icon(
+                                                      Icons.calendar_month,
+                                                      color: ColorManager
+                                                          .primaryColor),
+                                                  const SizedBox(
+                                                    width: 12,
+                                                  ),
+                                                ],
+                                              )
                                       ],
                                     ),
                                   ),
