@@ -188,16 +188,28 @@ class EventController extends GetxController {
 
   void removeParticipantFromEvent(String participantId, String eventId) async {
     try {
-      await firestore
+      final participantRef = firestore
           .collection('events')
           .doc(eventId)
           .collection('participants')
-          .doc(participantId)
-          .delete();
+          .doc(participantId);
+      final participantDoc = await participantRef.get();
+      if (!participantDoc.exists) {
+        throw Exception('Participant document does not exist');
+      }
+
+      await participantRef.delete();
+
+      final qrCodeUrl = participantDoc['qrCode'];
+      if (qrCodeUrl != null) {
+        final storageRef = firebaseStorage.refFromURL(qrCodeUrl);
+        await storageRef.delete();
+      }
+
       Get.back();
       Get.snackbar(
         'Success!',
-        'You have successfully deregister your self from event.',
+        'You have successfully deregister yourself from the event.',
       );
     } catch (e) {
       Get.snackbar(
