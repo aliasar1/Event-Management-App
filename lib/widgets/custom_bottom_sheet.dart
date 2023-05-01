@@ -1,5 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_booking_app/manager/firebase_constants.dart';
-import 'package:event_booking_app/models/user.dart';
 import 'package:event_booking_app/utils/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,19 +13,43 @@ import '../models/event.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/custom_text.dart';
 
-class CustomBottomSheet extends StatelessWidget {
+class CustomBottomSheet extends StatefulWidget {
   CustomBottomSheet({super.key, required this.event});
 
   final Event event;
 
+  @override
+  State<CustomBottomSheet> createState() => _CustomBottomSheetState();
+}
+
+class _CustomBottomSheetState extends State<CustomBottomSheet> {
   final eventController = Get.put(EventController());
+  bool isRegistered = false;
+
+  @override
+  void initState() {
+    super.initState();
+    final docRef = firestore
+        .collection('events')
+        .doc(widget.event.id)
+        .collection('participants')
+        .doc(firebaseAuth.currentUser!.uid)
+        .get();
+    docRef.then((docSnap) {
+      if (docSnap.exists) {
+        setState(() {
+          isRegistered = true;
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    DateTime dateStart = DateFormat("dd-MM-yyyy").parse(event.startDate);
-    DateTime dateEnd = DateFormat("dd-MM-yyyy").parse(event.endDate);
-    DateTime startTime = DateFormat('hh:mm a').parse(event.startTime);
-    DateTime endTime = DateFormat('hh:mm a').parse(event.endTime);
+    DateTime dateStart = DateFormat("dd-MM-yyyy").parse(widget.event.startDate);
+    DateTime dateEnd = DateFormat("dd-MM-yyyy").parse(widget.event.endDate);
+    DateTime startTime = DateFormat('hh:mm a').parse(widget.event.startTime);
+    DateTime endTime = DateFormat('hh:mm a').parse(widget.event.endTime);
     return SingleChildScrollView(
       child: Container(
         height: 570,
@@ -41,11 +65,11 @@ class CustomBottomSheet extends StatelessWidget {
                 height: 140,
                 width: double.infinity,
                 child: Image.network(
-                  event.posterUrl,
+                  widget.event.posterUrl,
                   fit: BoxFit.cover,
                 )),
             Txt(
-              text: event.name.capitalizeFirstOfEach,
+              text: widget.event.name.capitalizeFirstOfEach,
               textAlign: TextAlign.left,
               fontFamily: FontsManager.fontFamilyPoppins,
               color: ColorManager.blackColor,
@@ -54,7 +78,7 @@ class CustomBottomSheet extends StatelessWidget {
             ),
             Flexible(
               child: Txt(
-                text: event.description,
+                text: widget.event.description,
                 textAlign: TextAlign.left,
                 fontFamily: FontsManager.fontFamilyPoppins,
                 color: ColorManager.primaryColor,
@@ -158,10 +182,14 @@ class CustomBottomSheet extends StatelessWidget {
                       )
                     : null,
                 onPressed: () {
-                  eventController.addParticipantToEvent(
-                      firebaseAuth.currentUser!, event.id);
+                  isRegistered
+                      ? eventController.removeParticipantFromEvent(
+                          firebaseAuth.currentUser!.uid, widget.event.id)
+                      : eventController.addParticipantToEvent(
+                          firebaseAuth.currentUser!, widget.event.id);
                 },
-                text: StringsManager.registerNowTxt,
+                text:
+                    isRegistered ? "Deregister" : StringsManager.registerNowTxt,
                 textColor: ColorManager.backgroundColor,
               ),
             ),

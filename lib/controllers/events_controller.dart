@@ -126,7 +126,8 @@ class EventController extends GetxController {
           .collection('events')
           .doc(eventId)
           .collection('participants')
-          .add(user.toJson());
+          .doc(firebaseAuth.currentUser!.uid)
+          .set(user.toJson());
       toggleLoading2();
       Get.back();
       Get.snackbar(
@@ -138,6 +139,27 @@ class EventController extends GetxController {
       Get.snackbar(
         'Failure!',
         'Failed to register in event.',
+      );
+    }
+  }
+
+  void removeParticipantFromEvent(String participantId, String eventId) async {
+    try {
+      await firestore
+          .collection('events')
+          .doc(eventId)
+          .collection('participants')
+          .doc(participantId)
+          .delete();
+      Get.back();
+      Get.snackbar(
+        'Success!',
+        'You have successfully deregister your self from event.',
+      );
+    } catch (e) {
+      Get.snackbar(
+        'Failure!',
+        'Failed to remove the participant from the event.',
       );
     }
   }

@@ -268,10 +268,6 @@ class AddEventScreen extends StatelessWidget {
                     color: ColorManager.primaryColor,
                   )),
               style: const TextStyle(color: ColorManager.blackColor),
-              validator: ((value) {
-                // if (value.isEmpty) return kEventDayPresetNullError;
-                // return null;
-              }),
             ),
             const SizedBox(
               height: 12,
@@ -316,10 +312,6 @@ class AddEventScreen extends StatelessWidget {
                     color: ColorManager.primaryColor,
                   )),
               style: const TextStyle(color: ColorManager.blackColor),
-              validator: ((value) {
-                // if (value.isEmpty) return kEventDayPresetNullError;
-                // return null;
-              }),
             ),
             const SizedBox(
               height: 12,
@@ -363,10 +355,6 @@ class AddEventScreen extends StatelessWidget {
                     color: ColorManager.primaryColor,
                   )),
               style: const TextStyle(color: ColorManager.blackColor),
-              validator: ((value) {
-                // if (value.isEmpty) return kEventDayPresetNullError;
-                // return null;
-              }),
             ),
             const SizedBox(
               height: 12,
@@ -410,10 +398,6 @@ class AddEventScreen extends StatelessWidget {
                     color: ColorManager.primaryColor,
                   )),
               style: const TextStyle(color: ColorManager.blackColor),
-              validator: ((value) {
-                // if (value.isEmpty) return kEventDayPresetNullError;
-                // return null;
-              }),
             ),
             const SizedBox(
               height: 12,

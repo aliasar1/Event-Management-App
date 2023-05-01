@@ -1,10 +1,8 @@
 import 'package:event_booking_app/controllers/events_controller.dart';
-import 'package:event_booking_app/utils/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
-import '../controllers/search_controller.dart';
+import '../controllers/search_controller.dart' as ctrl;
 import '../manager/color_manager.dart';
 import '../manager/font_manager.dart';
 import '../manager/strings_manager.dart';
@@ -22,7 +20,7 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  final searchController = Get.put(SearchController());
+  final searchController = Get.put(ctrl.SearchController());
   final eventController = Get.put(EventController());
   @override
   void dispose() {
