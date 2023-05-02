@@ -14,6 +14,7 @@ import '../widgets/custom_text.dart';
 import '../widgets/cutom_text_form_field.dart';
 import '../widgets/packages/group_radio_buttons/src/radio_button_field.dart';
 
+// ignore: must_be_immutable
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
 

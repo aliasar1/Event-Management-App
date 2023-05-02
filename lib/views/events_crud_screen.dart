@@ -14,6 +14,7 @@ import '../widgets/custom_text.dart';
 import '../widgets/cutom_text_form_field.dart';
 import '../widgets/packages/dropdown_plus/src/text_dropdown.dart';
 
+// ignore: must_be_immutable
 class AddEventScreen extends StatelessWidget {
   AddEventScreen({super.key});
 

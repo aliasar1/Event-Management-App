@@ -95,8 +95,6 @@ class _ExpansionTileState extends State<ExpansionCard>
       CurveTween(curve: Curves.easeOut);
   static final Animatable<double> _easeInTween =
       CurveTween(curve: Curves.easeIn);
-  static final Animatable<double> _halfTween =
-      Tween<double>(begin: 0.0, end: 0.5);
 
   final ColorTween _borderColorTween = ColorTween();
   final ColorTween _headerColorTween = ColorTween();
@@ -104,7 +102,6 @@ class _ExpansionTileState extends State<ExpansionCard>
   final ColorTween _backgroundColorTween = ColorTween();
 
   late AnimationController _controller;
-  late Animation<double> _iconTurns;
   late Animation<double> _heightFactor;
   late Animation<Color?> _headerColor;
   late Animation<Color?> _iconColor;
@@ -117,7 +114,6 @@ class _ExpansionTileState extends State<ExpansionCard>
     super.initState();
     _controller = AnimationController(duration: _kExpand, vsync: this);
     _heightFactor = _controller.drive(_easeInTween);
-    _iconTurns = _controller.drive(_halfTween.chain(_easeInTween));
     _headerColor = _controller.drive(_headerColorTween.chain(_easeInTween));
     _iconColor = _controller.drive(_iconColorTween.chain(_easeInTween));
     _backgroundColor =

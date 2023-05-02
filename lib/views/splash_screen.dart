@@ -1,7 +1,4 @@
 import 'dart:async';
-
-import 'package:event_booking_app/views/organizer_home_screen.dart';
-import 'package:event_booking_app/views/participant_home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -12,8 +9,6 @@ import '../manager/strings_manager.dart';
 import '../manager/values_manager.dart';
 import '../utils/size_config.dart';
 import '../widgets/custom_text.dart';
-import 'login_screen.dart';
-import 'offline_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);

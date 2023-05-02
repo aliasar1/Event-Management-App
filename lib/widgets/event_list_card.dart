@@ -8,6 +8,7 @@ import '../controllers/events_controller.dart';
 import '../manager/color_manager.dart';
 import '../manager/values_manager.dart';
 import '../models/event.dart';
+import '../views/qrcode_scanner.dart';
 import 'custom_text.dart';
 
 class EventListCard extends StatelessWidget {
@@ -85,14 +86,7 @@ class EventListCard extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    InkWell(
-                      onTap: () {
-                        eventController.scanQRCode(event.id);
-                      },
-                      child: const Icon(
-                        Icons.qr_code_scanner,
-                      ),
-                    ),
+                    QrCodeScanner(event: event),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [

@@ -2,7 +2,6 @@ import 'package:event_booking_app/utils/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 
 import '../controllers/events_controller.dart';
 import '../manager/color_manager.dart';

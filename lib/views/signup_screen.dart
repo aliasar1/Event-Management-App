@@ -13,6 +13,7 @@ import '../widgets/custom_button.dart';
 import '../widgets/custom_text.dart';
 import '../widgets/cutom_text_form_field.dart';
 
+// ignore: must_be_immutable
 class SignupScreen extends StatelessWidget {
   SignupScreen({super.key});
   static const String routeName = '/signupScreen';

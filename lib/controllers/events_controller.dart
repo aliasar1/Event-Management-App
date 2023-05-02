@@ -1,16 +1,12 @@
-import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:image/image.dart' as img;
 
 import '../manager/color_manager.dart';
 import '../manager/firebase_constants.dart';
@@ -58,7 +54,7 @@ class EventController extends GetxController {
 
   Future<String> _uploadToStorage(File image) async {
     String id = await getUniqueId();
-    Reference ref = firebaseStorage.ref().child('qrCodes').child(id);
+    Reference ref = firebaseStorage.ref().child('events').child(id);
 
     UploadTask uploadTask = ref.putFile(image);
     TaskSnapshot snap = await uploadTask;
@@ -120,7 +116,8 @@ class EventController extends GetxController {
   Future<void> generateAndSaveQrCode(User user, String eventId) async {
     try {
       // Generate QR code data
-      final qrData = user.toJson().toString();
+      //final qrData = user.toJson().toString();
+      final qrData = user.uid.toString();
       final qrImage = await QrPainter(
         data: qrData,
         version: QrVersions.auto,
@@ -157,34 +154,6 @@ class EventController extends GetxController {
       Get.snackbar(
         'Failure!',
         'Failed to register in event.',
-      );
-    }
-  }
-
-  void scanQRCode(String eventId) async {
-    try {
-      final qrCode = await FlutterBarcodeScanner.scanBarcode(
-          '#ff6666', 'Cancel', true, ScanMode.QR);
-
-      final data = jsonDecode(qrCode) as Map<String, dynamic>;
-      final participantRef = firestore
-          .collection('events')
-          .doc(eventId)
-          .collection('participants')
-          .doc(data['uid']);
-      await participantRef.update({
-        'haveAttended': true,
-      }).then((value) => {
-            Get.snackbar(
-              'Success!',
-              'Your presence in event is recorded.',
-            ),
-          });
-      Get.back();
-    } on PlatformException {
-      Get.snackbar(
-        'Failure!',
-        'Error occured when scanning.',
       );
     }
   }

@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_booking_app/manager/firebase_constants.dart';
 import 'package:event_booking_app/utils/extensions.dart';
 import 'package:flutter/material.dart';
