@@ -41,19 +41,28 @@ class _QrCodeScannerState extends State<QrCodeScanner> {
       );
 
       if (!mounted) return;
-      final uid = qrCode.toString();
-      final participantRef = firestore
-          .collection('events')
-          .doc(eventId)
-          .collection('participants')
-          .doc(uid);
-      await participantRef.update({
-        'haveAttended': true,
-      });
-      Get.snackbar(
-        'Success!',
-        'Your presence in event is recorded.',
-      );
+      final ids = qrCode.split("-");
+      final uid = ids[0];
+      final eId = ids[1];
+      if (eId == eventId) {
+        final participantRef = firestore
+            .collection('events')
+            .doc(eventId)
+            .collection('participants')
+            .doc(uid);
+        await participantRef.update({
+          'haveAttended': true,
+        });
+        Get.snackbar(
+          'Success!',
+          'Your presence in event is recorded.',
+        );
+      } else {
+        Get.snackbar(
+          'Failure!',
+          'Participant in not registered in this event.',
+        );
+      }
     } on PlatformException catch (e) {
       Get.snackbar(
         'Failure!',

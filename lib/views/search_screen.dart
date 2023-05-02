@@ -1,4 +1,6 @@
 import 'package:event_booking_app/controllers/events_controller.dart';
+import 'package:event_booking_app/manager/firebase_constants.dart';
+import 'package:event_booking_app/utils/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -160,7 +162,8 @@ class _SearchScreenState extends State<SearchScreen> {
                                           color: ColorManager.blackColor,
                                         ),
                                         Txt(
-                                          text: event.name,
+                                          text:
+                                              event.name.capitalizeFirstOfEach,
                                           textAlign: TextAlign.start,
                                           fontWeight: FontWeightManager.bold,
                                           fontSize:
@@ -173,10 +176,23 @@ class _SearchScreenState extends State<SearchScreen> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.end,
                                           children: [
-                                            FavoriteIcon(
-                                              event: event,
-                                              eventController: eventController,
-                                            ),
+                                            event.organizerId ==
+                                                    firebaseAuth
+                                                        .currentUser!.uid
+                                                ? const Chip(
+                                                    label: Txt(
+                                                      text: "Organizer",
+                                                      color: Colors.white,
+                                                    ),
+                                                    backgroundColor:
+                                                        ColorManager
+                                                            .primaryColor,
+                                                  )
+                                                : FavoriteIcon(
+                                                    event: event,
+                                                    eventController:
+                                                        eventController,
+                                                  ),
                                             const SizedBox(
                                               width: 12,
                                             ),

@@ -117,7 +117,7 @@ class EventController extends GetxController {
     try {
       // Generate QR code data
       //final qrData = user.toJson().toString();
-      final qrData = user.uid.toString();
+      final qrData = "${user.uid}-$eventId";
       final qrImage = await QrPainter(
         data: qrData,
         version: QrVersions.auto,
