@@ -1,17 +1,11 @@
-import 'package:event_booking_app/manager/color_manager.dart';
-import 'package:event_booking_app/manager/firebase_constants.dart';
 import 'package:event_booking_app/utils/extensions.dart';
-import 'package:event_booking_app/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../controllers/events_controller.dart';
-import '../manager/font_manager.dart';
-import '../manager/strings_manager.dart';
-import '../manager/values_manager.dart';
 import '../models/event.dart';
-import '../widgets/custom_bottom_sheet.dart';
-import '../widgets/fav_icon.dart';
+import '../utils/exports/manager_exports.dart';
+import '../utils/exports/widgets_exports.dart';
 
 class EventScreen extends StatefulWidget {
   @override

@@ -8,12 +8,10 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
-import '../manager/color_manager.dart';
-import '../manager/firebase_constants.dart';
-import '../models/event.dart';
-import '../models/user.dart';
+import '../utils/exports/manager_exports.dart';
+import '../utils/exports/models_export.dart';
+import '../utils/exports/widgets_exports.dart';
 import '../utils/utils.dart';
-import '../widgets/packages/dropdown_plus/src/dropdown.dart';
 
 class EventController extends GetxController {
   Rx<bool> isLoading = false.obs;

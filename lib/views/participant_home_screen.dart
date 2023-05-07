@@ -1,17 +1,13 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-import 'package:event_booking_app/controllers/auth_controller.dart';
-import 'package:event_booking_app/views/events_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../manager/color_manager.dart';
-import 'events_attended_history.dart';
-import 'fav_events_screen.dart';
-import 'profile_view.dart';
-import 'search_screen.dart';
+import '../controllers/auth_controller.dart';
+import '../utils/exports/manager_exports.dart';
+import '../utils/exports/views_exports.dart';
 
 class ParticipantHomeScreen extends StatefulWidget {
-  ParticipantHomeScreen({super.key});
+  const ParticipantHomeScreen({super.key});
 
   static const String routeName = '/participantHomeScreen';
 

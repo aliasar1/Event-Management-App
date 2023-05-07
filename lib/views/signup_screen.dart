@@ -1,17 +1,13 @@
-import 'package:event_booking_app/views/login_screen.dart';
+// ignore: must_be_immutable
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../controllers/auth_controller.dart';
-import '../manager/color_manager.dart';
-import '../manager/font_manager.dart';
-import '../manager/strings_manager.dart';
-import '../manager/values_manager.dart';
+import '../utils/exports/manager_exports.dart';
+import '../utils/exports/widgets_exports.dart';
 import '../utils/size_config.dart';
-import '../widgets/custom_button.dart';
-import '../widgets/custom_text.dart';
-import '../widgets/cutom_text_form_field.dart';
+import 'login_screen.dart';
 
 // ignore: must_be_immutable
 class SignupScreen extends StatelessWidget {

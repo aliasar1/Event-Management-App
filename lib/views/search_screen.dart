@@ -1,22 +1,16 @@
-import 'package:event_booking_app/controllers/events_controller.dart';
-import 'package:event_booking_app/manager/firebase_constants.dart';
 import 'package:event_booking_app/utils/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+
+import '../controllers/events_controller.dart';
 import '../controllers/search_controller.dart' as ctrl;
-import '../manager/color_manager.dart';
-import '../manager/font_manager.dart';
-import '../manager/strings_manager.dart';
-import '../manager/values_manager.dart';
 import '../models/event.dart';
-import '../widgets/custom_bottom_sheet.dart';
-import '../widgets/custom_search.dart';
-import '../widgets/custom_text.dart';
-import '../widgets/fav_icon.dart';
+import '../utils/exports/manager_exports.dart';
+import '../utils/exports/widgets_exports.dart';
 
 class SearchScreen extends StatefulWidget {
-  SearchScreen({super.key});
+  const SearchScreen({super.key});
 
   static const String routeName = '/searchEventScreen';
 

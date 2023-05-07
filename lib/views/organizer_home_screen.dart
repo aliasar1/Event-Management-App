@@ -1,15 +1,13 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-import 'package:event_booking_app/controllers/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../manager/color_manager.dart';
-import 'events_crud_screen.dart';
-import 'organized_events_screen.dart';
-import 'profile_view.dart';
+import '../controllers/auth_controller.dart';
+import '../utils/exports/manager_exports.dart';
+import '../utils/exports/views_exports.dart';
 
 class OrganizerHomeScreen extends StatefulWidget {
-  OrganizerHomeScreen({super.key});
+  const OrganizerHomeScreen({super.key});
 
   static const String routeName = '/organizerHomeScreen';
 
@@ -73,8 +71,7 @@ class _OrganizerHomeScreenState extends State<OrganizerHomeScreen> {
 }
 
 var pages = [
-  EventsOrganizedScreen(),
+  const EventsOrganizedScreen(),
   AddEventScreen(),
-  //QrCodeScanner(),
   ProfileView(),
 ];

@@ -3,17 +3,12 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../controllers/events_controller.dart';
-import '../manager/color_manager.dart';
-import '../manager/font_manager.dart';
-import '../manager/strings_manager.dart';
-import '../manager/values_manager.dart';
 import '../models/event.dart';
-import '../widgets/custom_bottom_sheet.dart';
-import '../widgets/custom_text.dart';
-import '../widgets/event_list_card.dart';
+import '../utils/exports/manager_exports.dart';
+import '../utils/exports/widgets_exports.dart';
 
 class EventsOrganizedScreen extends StatefulWidget {
-  EventsOrganizedScreen({super.key});
+  const EventsOrganizedScreen({super.key});
 
   static const String routeName = '/eventsOraganizedScreen';
 

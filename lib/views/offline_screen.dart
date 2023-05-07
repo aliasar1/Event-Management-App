@@ -1,14 +1,10 @@
 import 'package:app_settings/app_settings.dart';
-import 'package:event_booking_app/manager/strings_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../manager/color_manager.dart';
-import '../manager/font_manager.dart';
-import '../manager/values_manager.dart';
+import '../utils/exports/manager_exports.dart';
+import '../utils/exports/widgets_exports.dart';
 import '../utils/size_config.dart';
-import '../widgets/custom_button.dart';
-import '../widgets/custom_text.dart';
 
 class OfflineScreen extends StatelessWidget {
   const OfflineScreen({Key? key}) : super(key: key);

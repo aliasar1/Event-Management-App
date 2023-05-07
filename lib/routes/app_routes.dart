@@ -1,16 +1,4 @@
-import '../../views/login_screen.dart';
-import '../../views/signup_screen.dart';
-import '../../views/splash_screen.dart';
-import '../views/events_attended_history.dart';
-import '../views/events_crud_screen.dart';
-import '../views/events_screen.dart';
-import '../views/fav_events_screen.dart';
-import '../views/offline_screen.dart';
-import '../views/organized_events_screen.dart';
-import '../views/organizer_home_screen.dart';
-import '../views/participant_home_screen.dart';
-import '../views/profile_view.dart';
-import '../views/search_screen.dart';
+import '../utils/exports/views_exports.dart';
 
 class AppRoutes {
   static const String splash = SplashScreen.routeName;

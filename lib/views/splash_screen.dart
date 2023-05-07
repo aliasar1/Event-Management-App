@@ -1,14 +1,12 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../controllers/splash_controller.dart';
-import '../manager/color_manager.dart';
-import '../manager/font_manager.dart';
-import '../manager/strings_manager.dart';
-import '../manager/values_manager.dart';
+import '../utils/exports/manager_exports.dart';
+import '../utils/exports/widgets_exports.dart';
 import '../utils/size_config.dart';
-import '../widgets/custom_text.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -34,7 +32,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return SplashView();
+    return const SplashView();
   }
 
   // @override
@@ -66,13 +64,13 @@ class SplashView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return const SafeArea(
       child: Scaffold(
         backgroundColor: ColorManager.scaffoldBackgroundColor,
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
+            children: [
               Icon(
                 Icons.calendar_month,
                 size: SizeManager.splashIconSize,

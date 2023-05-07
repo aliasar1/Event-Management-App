@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../manager/firebase_constants.dart';
+import '../utils/exports/manager_exports.dart';
 import '../utils/utils.dart';
 
 class ProfileController extends GetxController {

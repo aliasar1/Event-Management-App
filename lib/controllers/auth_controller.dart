@@ -3,14 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
-import '../manager/color_manager.dart';
-import '../manager/firebase_constants.dart';
 import '../models/enums.dart';
+import '../utils/exports/manager_exports.dart';
+import '../utils/exports/views_exports.dart';
 import '../utils/utils.dart';
 import '../models/user.dart' as model;
-import '../views/organizer_home_screen.dart';
-import '../views/participant_home_screen.dart';
-import '../views/login_screen.dart';
 
 class AuthenticateController extends GetxController with CacheManager {
   RxBool isLoggedIn = false.obs;

@@ -1,18 +1,6 @@
-import 'package:event_booking_app/views/events_crud_screen.dart';
-import 'package:event_booking_app/views/fav_events_screen.dart';
-import 'package:event_booking_app/views/login_screen.dart';
-import 'package:event_booking_app/views/offline_screen.dart';
-import 'package:event_booking_app/views/profile_view.dart';
-import 'package:event_booking_app/views/search_screen.dart';
-import 'package:event_booking_app/views/signup_screen.dart';
 import 'package:get/get.dart';
 
-import '../views/events_attended_history.dart';
-import '../views/events_screen.dart';
-import '../views/organized_events_screen.dart';
-import '../views/organizer_home_screen.dart';
-import '../views/participant_home_screen.dart';
-import '../views/splash_screen.dart';
+import '../utils/exports/views_exports.dart';
 import 'app_routes.dart';
 
 class AppPages {
@@ -31,11 +19,11 @@ class AppPages {
     ),
     GetPage(
       name: AppRoutes.participantHome,
-      page: () => ParticipantHomeScreen(),
+      page: () => const ParticipantHomeScreen(),
     ),
     GetPage(
       name: AppRoutes.organizerHome,
-      page: () => OrganizerHomeScreen(),
+      page: () => const OrganizerHomeScreen(),
     ),
     GetPage(
       name: AppRoutes.participantsEventsHistory,
@@ -59,15 +47,15 @@ class AppPages {
     ),
     GetPage(
       name: AppRoutes.eventsOrganized,
-      page: () => EventsOrganizedScreen(),
+      page: () => const EventsOrganizedScreen(),
     ),
     GetPage(
       name: AppRoutes.profile,
-      page: () => ProfileView(),
+      page: () => const ProfileView(),
     ),
     GetPage(
       name: AppRoutes.searchEvent,
-      page: () => SearchScreen(),
+      page: () => const SearchScreen(),
     ),
   ];
 }

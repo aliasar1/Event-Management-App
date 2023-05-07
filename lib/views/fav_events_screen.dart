@@ -4,14 +4,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../controllers/events_controller.dart';
-import '../manager/color_manager.dart';
-import '../manager/font_manager.dart';
-import '../manager/strings_manager.dart';
-import '../manager/values_manager.dart';
 import '../models/event.dart';
-import '../widgets/custom_bottom_sheet.dart';
-import '../widgets/custom_text.dart';
-import '../widgets/fav_icon.dart';
+import '../utils/exports/manager_exports.dart';
+import '../utils/exports/widgets_exports.dart';
 
 class FavouriteEventScreen extends StatelessWidget {
   FavouriteEventScreen({Key? key});

@@ -1,18 +1,12 @@
-import 'package:event_booking_app/manager/firebase_constants.dart';
-import 'package:event_booking_app/manager/values_manager.dart';
-import 'package:event_booking_app/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../controllers/profile_controller.dart';
-import '../manager/color_manager.dart';
-import '../manager/font_manager.dart';
-import '../manager/strings_manager.dart';
-import '../widgets/custom_button.dart';
-import '../widgets/cutom_text_form_field.dart';
+import '../utils/exports/manager_exports.dart';
+import '../utils/exports/widgets_exports.dart';
 
 class ProfileView extends StatefulWidget {
-  ProfileView({super.key});
+  const ProfileView({super.key});
 
   static const String routeName = '/profileViewScreen';
 
