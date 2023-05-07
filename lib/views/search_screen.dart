@@ -18,6 +18,8 @@ import '../widgets/fav_icon.dart';
 class SearchScreen extends StatefulWidget {
   SearchScreen({super.key});
 
+  static const String routeName = '/searchEventScreen';
+
   @override
   State<SearchScreen> createState() => _SearchScreenState();
 }

@@ -16,6 +16,8 @@ import '../widgets/fav_icon.dart';
 class EventScreen extends StatefulWidget {
   @override
   State<EventScreen> createState() => _EventScreenState();
+
+  static const String routeName = '/upComingEventsScreen';
 }
 
 class _EventScreenState extends State<EventScreen> {

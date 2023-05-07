@@ -16,6 +16,8 @@ import '../widgets/fav_icon.dart';
 class FavouriteEventScreen extends StatelessWidget {
   FavouriteEventScreen({Key? key});
 
+  static const String routeName = '/favEventsScreen';
+
   final eventController = Get.put(EventController());
 
   @override

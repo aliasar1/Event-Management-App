@@ -16,6 +16,8 @@ import '../widgets/fav_icon.dart';
 class EventsAttendedScreen extends StatelessWidget {
   EventsAttendedScreen({super.key});
 
+  static const String routeName = '/eventsAttendedScreen';
+
   final eventController = Get.put(EventController());
 
   @override

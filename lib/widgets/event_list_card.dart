@@ -1,6 +1,7 @@
 import 'package:event_booking_app/manager/font_manager.dart';
 import 'package:event_booking_app/models/user.dart';
 import 'package:event_booking_app/utils/extensions.dart';
+import 'package:event_booking_app/widgets/qrscanner.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -8,7 +9,6 @@ import '../controllers/events_controller.dart';
 import '../manager/color_manager.dart';
 import '../manager/values_manager.dart';
 import '../models/event.dart';
-import '../views/qrcode_scanner.dart';
 import 'custom_text.dart';
 
 class EventListCard extends StatelessWidget {

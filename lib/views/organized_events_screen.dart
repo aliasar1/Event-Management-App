@@ -15,6 +15,8 @@ import '../widgets/event_list_card.dart';
 class EventsOrganizedScreen extends StatefulWidget {
   EventsOrganizedScreen({super.key});
 
+  static const String routeName = '/eventsOraganizedScreen';
+
   @override
   State<EventsOrganizedScreen> createState() => _EventsOrganizedScreenState();
 }

@@ -18,6 +18,8 @@ import '../widgets/packages/dropdown_plus/src/text_dropdown.dart';
 class AddEventScreen extends StatelessWidget {
   AddEventScreen({super.key});
 
+  static const String routeName = '/addEventScreen';
+
   final eventController = Get.put(EventController());
 
   List<String> category = [

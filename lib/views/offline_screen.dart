@@ -13,6 +13,8 @@ import '../widgets/custom_text.dart';
 class OfflineScreen extends StatelessWidget {
   const OfflineScreen({Key? key}) : super(key: key);
 
+  static const String routeName = '/offlineScreen';
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);

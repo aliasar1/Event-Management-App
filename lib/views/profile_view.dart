@@ -14,6 +14,8 @@ import '../widgets/cutom_text_form_field.dart';
 class ProfileView extends StatefulWidget {
   ProfileView({super.key});
 
+  static const String routeName = '/profileViewScreen';
+
   @override
   State<ProfileView> createState() => _ProfileViewState();
 }
