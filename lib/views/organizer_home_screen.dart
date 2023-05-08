@@ -18,7 +18,7 @@ class OrganizerHomeScreen extends StatefulWidget {
 class _OrganizerHomeScreenState extends State<OrganizerHomeScreen> {
   AuthenticateController controller = Get.put(AuthenticateController());
 
-  var pageIndex = 2;
+  var pageIndex = 0;
 
   final GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
 
@@ -32,7 +32,9 @@ class _OrganizerHomeScreenState extends State<OrganizerHomeScreen> {
           elevation: 0,
           actions: [
             GestureDetector(
-              onTap: () => controller.logout(),
+              onTap: () {
+                controller.logout();
+              },
               child: const Icon(
                 Icons.logout,
                 color: ColorManager.blackColor,

@@ -33,7 +33,9 @@ class _ParticipantHomeScreenState extends State<ParticipantHomeScreen> {
           backgroundColor: ColorManager.scaffoldBackgroundColor,
           actions: [
             GestureDetector(
-              onTap: () => controller.logout(),
+              onTap: () {
+                controller.logout();
+              },
               child: const Icon(
                 Icons.logout,
                 color: ColorManager.blackColor,
@@ -75,8 +77,8 @@ class _ParticipantHomeScreenState extends State<ParticipantHomeScreen> {
 
 var participantPages = [
   EventsAttendedScreen(),
-  SearchScreen(),
+  const SearchScreen(),
   EventScreen(),
   FavouriteEventScreen(),
-  ProfileView(),
+  const ProfileView(),
 ];

@@ -8,6 +8,8 @@ import '../models/event.dart';
 import '../utils/exports/manager_exports.dart';
 import '../utils/exports/widgets_exports.dart';
 
+import 'package:intl/intl.dart';
+
 class EventsAttendedScreen extends StatelessWidget {
   EventsAttendedScreen({super.key});
 
@@ -108,8 +110,9 @@ class EventsAttendedScreen extends StatelessWidget {
                                       loadingBuilder: (BuildContext context,
                                           Widget child,
                                           ImageChunkEvent? loadingProgress) {
-                                        if (loadingProgress == null)
+                                        if (loadingProgress == null) {
                                           return child;
+                                        }
                                         return Center(
                                           child: CircularProgressIndicator(
                                             color: ColorManager.blackColor,
@@ -166,30 +169,72 @@ class EventsAttendedScreen extends StatelessWidget {
                                         ),
                                         Row(
                                           mainAxisAlignment:
-                                              MainAxisAlignment.end,
+                                              MainAxisAlignment.spaceBetween,
                                           children: [
-                                            FavoriteIcon(
-                                              event: event,
-                                              eventController: eventController,
-                                            ),
-                                            const SizedBox(
-                                              width: 12,
-                                            ),
-                                            InkWell(
-                                              onTap: () async {
-                                                String url =
-                                                    await eventController
-                                                        .showEventQr(event);
-                                                showQr(context, url);
-                                              },
-                                              child: const Icon(
-                                                Icons.qr_code,
-                                                color:
-                                                    ColorManager.primaryColor,
-                                              ),
-                                            ),
-                                            const SizedBox(
-                                              width: 12,
+                                            DateFormat("dd-MM-yyyy")
+                                                        .parse(event.endDate)
+                                                        .isAfter(
+                                                            DateTime.now()) ||
+                                                    (DateFormat("dd-MM-yyyy")
+                                                            .parse(
+                                                                event.endDate)
+                                                            .isAtSameMomentAs(
+                                                                DateTime
+                                                                    .now()) &&
+                                                        TimeOfDay.fromDateTime(
+                                                                DateFormat(
+                                                                        "h:mm a")
+                                                                    .parse(event
+                                                                        .endTime))
+                                                            .toDateTime()
+                                                            .isAfter(
+                                                                DateTime.now()))
+                                                ? const Chip(
+                                                    label: Txt(
+                                                      text: "Upcoming",
+                                                      color: Colors.white,
+                                                    ),
+                                                    backgroundColor:
+                                                        ColorManager
+                                                            .primaryColor,
+                                                  )
+                                                : const Chip(
+                                                    label: Txt(
+                                                      text: "Attended",
+                                                      color: Colors.white,
+                                                    ),
+                                                    backgroundColor:
+                                                        Colors.green,
+                                                  ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                              children: [
+                                                FavoriteIcon(
+                                                  event: event,
+                                                  eventController:
+                                                      eventController,
+                                                ),
+                                                const SizedBox(
+                                                  width: 12,
+                                                ),
+                                                InkWell(
+                                                  onTap: () async {
+                                                    String url =
+                                                        await eventController
+                                                            .showEventQr(event);
+                                                    showQr(context, url);
+                                                  },
+                                                  child: const Icon(
+                                                    Icons.qr_code,
+                                                    color: ColorManager
+                                                        .primaryColor,
+                                                  ),
+                                                ),
+                                                const SizedBox(
+                                                  width: 12,
+                                                ),
+                                              ],
                                             ),
                                           ],
                                         )

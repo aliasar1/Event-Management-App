@@ -475,6 +475,26 @@ class EventController extends GetxController {
     return participantList;
   }
 
+  Future<bool> fetchHasAttendedStatus(String eventId) async {
+    try {
+      final participantRef = firestore
+          .collection('events')
+          .doc(eventId)
+          .collection('participants')
+          .doc(firebaseAuth.currentUser!.uid);
+      final snapshot = await participantRef.get();
+      final data = snapshot.data() as Map<String, dynamic>;
+      final hasAttended = data['haveAttended'] as bool;
+      return hasAttended;
+    } catch (e) {
+      Get.snackbar(
+        'Error!',
+        'Error fetching data.',
+      );
+      return false;
+    }
+  }
+
   Future<List<User>> getAllEventParticipants(String eventId) async {
     final participantRef =
         firestore.collection('events').doc(eventId).collection('participants');

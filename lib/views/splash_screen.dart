@@ -1,9 +1,9 @@
 import 'dart:async';
 
+import 'package:event_booking_app/controllers/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../controllers/splash_controller.dart';
 import '../utils/exports/manager_exports.dart';
 import '../utils/exports/widgets_exports.dart';
 import '../utils/size_config.dart';
@@ -18,14 +18,18 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  final splashController = Get.put(SplashController());
+  final authController = Get.put(AuthenticateController());
 
   @override
   void initState() {
     super.initState();
+    // Timer(
+    //   const Duration(seconds: 2),
+    //   () => splashController.authController.checkLoginStatus(),
+    // );
     Timer(
       const Duration(seconds: 2),
-      () => splashController.authController.checkLoginStatus(),
+      () => authController.checkLoginStatus(),
     );
   }
 

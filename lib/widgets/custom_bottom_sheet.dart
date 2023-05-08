@@ -24,6 +24,7 @@ class CustomBottomSheet extends StatefulWidget {
 class _CustomBottomSheetState extends State<CustomBottomSheet> {
   final eventController = Get.put(EventController());
   bool isRegistered = false;
+  bool haveAttended = false;
 
   @override
   void initState() {
@@ -41,6 +42,15 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
         });
       }
     });
+    _fetchHasAttendedStatus();
+  }
+
+  Future<void> _fetchHasAttendedStatus() async {
+    final status =
+        await eventController.fetchHasAttendedStatus(widget.event.id);
+    setState(() {
+      haveAttended = status;
+    });
   }
 
   @override
@@ -57,7 +67,7 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
             vertical: MarginManager.marginXL,
             horizontal: MarginManager.marginXL),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
@@ -164,9 +174,6 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
                 ),
               ],
             ),
-            const SizedBox(
-              height: 6,
-            ),
             widget.event.organizerId == firebaseAuth.currentUser!.uid
                 ? const Center(
                     child: Chip(
@@ -177,33 +184,49 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
                       backgroundColor: ColorManager.primaryColor,
                     ),
                   )
-                : Obx(
-                    () => CustomButton(
-                      color: ColorManager.blackColor,
-                      hasInfiniteWidth: true,
-                      buttonType: ButtonType.loading,
-                      loadingWidget: eventController.isLoading2.value
-                          ? const Center(
-                              child: CircularProgressIndicator(
-                                color: Colors.white,
-                                backgroundColor:
-                                    ColorManager.scaffoldBackgroundColor,
-                              ),
-                            )
-                          : null,
-                      onPressed: () {
-                        isRegistered
-                            ? eventController.removeParticipantFromEvent(
-                                firebaseAuth.currentUser!.uid, widget.event.id)
-                            : eventController.addParticipantToEvent(
-                                firebaseAuth.currentUser!, widget.event.id);
-                      },
-                      text: isRegistered
-                          ? "Deregister"
-                          : StringsManager.registerNowTxt,
-                      textColor: ColorManager.backgroundColor,
-                    ),
-                  ),
+                : DateFormat("dd-MM-yyyy")
+                            .parse(widget.event.endDate)
+                            .isAfter(DateTime.now()) ||
+                        (DateFormat("dd-MM-yyyy")
+                                .parse(widget.event.endDate)
+                                .isAtSameMomentAs(DateTime.now()) &&
+                            TimeOfDay.fromDateTime(DateFormat("h:mm a")
+                                    .parse(widget.event.endTime))
+                                .toDateTime()
+                                .isAfter(DateTime.now()))
+                    ? haveAttended
+                        ? Container()
+                        : Obx(
+                            () => CustomButton(
+                              color: ColorManager.blackColor,
+                              hasInfiniteWidth: true,
+                              buttonType: ButtonType.loading,
+                              loadingWidget: eventController.isLoading2.value
+                                  ? const Center(
+                                      child: CircularProgressIndicator(
+                                        color: Colors.white,
+                                        backgroundColor: ColorManager
+                                            .scaffoldBackgroundColor,
+                                      ),
+                                    )
+                                  : null,
+                              onPressed: () {
+                                isRegistered
+                                    ? eventController
+                                        .removeParticipantFromEvent(
+                                            firebaseAuth.currentUser!.uid,
+                                            widget.event.id)
+                                    : eventController.addParticipantToEvent(
+                                        firebaseAuth.currentUser!,
+                                        widget.event.id);
+                              },
+                              text: isRegistered
+                                  ? "Deregister"
+                                  : StringsManager.registerNowTxt,
+                              textColor: ColorManager.backgroundColor,
+                            ),
+                          )
+                    : Container(),
           ],
         ),
       ),

@@ -9,6 +9,8 @@ import '../models/event.dart';
 import '../utils/exports/manager_exports.dart';
 import '../utils/exports/widgets_exports.dart';
 
+import 'package:intl/intl.dart';
+
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
 
@@ -85,122 +87,143 @@ class _SearchScreenState extends State<SearchScreen> {
                         itemCount: searchController.searchedEvents.length,
                         itemBuilder: (context, index) {
                           Event event = searchController.searchedEvents[index];
-                          return InkWell(
-                            onTap: () {
-                              showModalBottomSheet(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return CustomBottomSheet(event: event);
-                                  });
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: ColorManager.cardBackGroundColor,
-                              ),
-                              margin: const EdgeInsets.symmetric(
-                                  vertical: MarginManager.marginXS),
-                              width: double.infinity,
-                              height: 120,
-                              child: Row(
-                                children: [
-                                  SizedBox(
-                                    width: 140,
-                                    height: 150,
-                                    child: Image.network(
-                                      event.posterUrl,
-                                      loadingBuilder: (BuildContext context,
-                                          Widget child,
-                                          ImageChunkEvent? loadingProgress) {
-                                        if (loadingProgress == null) {
-                                          return child;
-                                        }
-                                        return Center(
-                                          child: CircularProgressIndicator(
-                                            color: ColorManager.blackColor,
-                                            value: loadingProgress
-                                                        .expectedTotalBytes !=
-                                                    null
-                                                ? loadingProgress
-                                                        .cumulativeBytesLoaded /
-                                                    loadingProgress
-                                                        .expectedTotalBytes!
-                                                : null,
-                                          ),
-                                        );
-                                      },
-                                      errorBuilder: (BuildContext context,
-                                          Object exception,
-                                          StackTrace? stackTrace) {
-                                        return const Icon(Icons.error);
-                                      },
+                          return DateFormat("dd-MM-yyyy")
+                                      .parse(event.endDate)
+                                      .isAfter(DateTime.now()) ||
+                                  (DateFormat("dd-MM-yyyy")
+                                          .parse(event.endDate)
+                                          .isAtSameMomentAs(DateTime.now()) &&
+                                      TimeOfDay.fromDateTime(
+                                              DateFormat("h:mm a")
+                                                  .parse(event.endTime))
+                                          .toDateTime()
+                                          .isAfter(DateTime.now()))
+                              ? InkWell(
+                                  onTap: () {
+                                    showModalBottomSheet(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return CustomBottomSheet(
+                                              event: event);
+                                        });
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: ColorManager.cardBackGroundColor,
                                     ),
-                                  ),
-                                  const SizedBox(
-                                    width: 12,
-                                  ),
-                                  Flexible(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
+                                    margin: const EdgeInsets.symmetric(
+                                        vertical: MarginManager.marginXS),
+                                    width: double.infinity,
+                                    height: 120,
+                                    child: Row(
                                       children: [
-                                        Txt(
-                                          text:
-                                              '${event.startDate} at ${event.startTime}',
-                                          useOverflow: true,
-                                          textAlign: TextAlign.start,
-                                          fontWeight: FontWeightManager.regular,
-                                          fontSize: FontSize.subTitleFontSize,
-                                          fontFamily:
-                                              FontsManager.fontFamilyPoppins,
-                                          color: ColorManager.blackColor,
+                                        SizedBox(
+                                          width: 140,
+                                          height: 150,
+                                          child: Image.network(
+                                            event.posterUrl,
+                                            loadingBuilder:
+                                                (BuildContext context,
+                                                    Widget child,
+                                                    ImageChunkEvent?
+                                                        loadingProgress) {
+                                              if (loadingProgress == null) {
+                                                return child;
+                                              }
+                                              return Center(
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  color:
+                                                      ColorManager.blackColor,
+                                                  value: loadingProgress
+                                                              .expectedTotalBytes !=
+                                                          null
+                                                      ? loadingProgress
+                                                              .cumulativeBytesLoaded /
+                                                          loadingProgress
+                                                              .expectedTotalBytes!
+                                                      : null,
+                                                ),
+                                              );
+                                            },
+                                            errorBuilder: (BuildContext context,
+                                                Object exception,
+                                                StackTrace? stackTrace) {
+                                              return const Icon(Icons.error);
+                                            },
+                                          ),
                                         ),
-                                        Txt(
-                                          text:
-                                              event.name.capitalizeFirstOfEach,
-                                          textAlign: TextAlign.start,
-                                          fontWeight: FontWeightManager.bold,
-                                          fontSize:
-                                              FontSize.titleFontSize * 0.7,
-                                          fontFamily:
-                                              FontsManager.fontFamilyPoppins,
-                                          color: ColorManager.blackColor,
+                                        const SizedBox(
+                                          width: 12,
                                         ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          children: [
-                                            event.organizerId ==
-                                                    firebaseAuth
-                                                        .currentUser!.uid
-                                                ? const Chip(
-                                                    label: Txt(
-                                                      text: "Organizer",
-                                                      color: Colors.white,
-                                                    ),
-                                                    backgroundColor:
-                                                        ColorManager
-                                                            .primaryColor,
-                                                  )
-                                                : FavoriteIcon(
-                                                    event: event,
-                                                    eventController:
-                                                        eventController,
+                                        Flexible(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceAround,
+                                            children: [
+                                              Txt(
+                                                text:
+                                                    '${event.startDate} at ${event.startTime}',
+                                                useOverflow: true,
+                                                textAlign: TextAlign.start,
+                                                fontWeight:
+                                                    FontWeightManager.regular,
+                                                fontSize:
+                                                    FontSize.subTitleFontSize,
+                                                fontFamily: FontsManager
+                                                    .fontFamilyPoppins,
+                                                color: ColorManager.blackColor,
+                                              ),
+                                              Txt(
+                                                text: event
+                                                    .name.capitalizeFirstOfEach,
+                                                textAlign: TextAlign.start,
+                                                fontWeight:
+                                                    FontWeightManager.bold,
+                                                fontSize:
+                                                    FontSize.titleFontSize *
+                                                        0.7,
+                                                fontFamily: FontsManager
+                                                    .fontFamilyPoppins,
+                                                color: ColorManager.blackColor,
+                                              ),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                children: [
+                                                  event.organizerId ==
+                                                          firebaseAuth
+                                                              .currentUser!.uid
+                                                      ? const Chip(
+                                                          label: Txt(
+                                                            text: "Organizer",
+                                                            color: Colors.white,
+                                                          ),
+                                                          backgroundColor:
+                                                              ColorManager
+                                                                  .primaryColor,
+                                                        )
+                                                      : FavoriteIcon(
+                                                          event: event,
+                                                          eventController:
+                                                              eventController,
+                                                        ),
+                                                  const SizedBox(
+                                                    width: 12,
                                                   ),
-                                            const SizedBox(
-                                              width: 12,
-                                            ),
-                                          ],
+                                                ],
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ],
                                     ),
                                   ),
-                                ],
-                              ),
-                            ),
-                          );
+                                )
+                              : Container();
                         },
                       ),
               ],

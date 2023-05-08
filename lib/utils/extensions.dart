@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:flutter/material.dart';
+
 import '../models/enums.dart';
 
 extension HexColor on Color {
@@ -20,6 +22,13 @@ extension CapExtension on String {
       .split(" ")
       .map((str) => str.inCaps)
       .join(" ");
+}
+
+extension TimeOfDayExtension on TimeOfDay {
+  DateTime toDateTime() {
+    final now = DateTime.now();
+    return DateTime(now.year, now.month, now.day, hour, minute);
+  }
 }
 
 extension ParseGenderToString on Gender {
