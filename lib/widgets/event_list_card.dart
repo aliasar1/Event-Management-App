@@ -11,6 +11,8 @@ import '../manager/values_manager.dart';
 import '../models/event.dart';
 import 'custom_text.dart';
 
+import 'package:intl/intl.dart';
+
 class EventListCard extends StatelessWidget {
   EventListCard({
     super.key,
@@ -86,7 +88,15 @@ class EventListCard extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    QrCodeScanner(event: event),
+                    isEventOngoing(event)
+                        ? QrCodeScanner(event: event)
+                        : const Chip(
+                            label: Txt(
+                              text: "Completed",
+                              color: Colors.white,
+                            ),
+                            backgroundColor: Colors.green,
+                          ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
@@ -112,8 +122,10 @@ class EventListCard extends StatelessWidget {
                           onTap: () async {
                             eventController.deleteEvent(event.id);
                           },
-                          child: const Icon(Icons.delete,
-                              color: ColorManager.redColor),
+                          child: isEventOngoing(event)
+                              ? const Icon(Icons.delete,
+                                  color: ColorManager.redColor)
+                              : Container(),
                         ),
                         const SizedBox(
                           width: 12,
@@ -128,6 +140,17 @@ class EventListCard extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  bool isEventOngoing(Event event) {
+    final endDate = DateFormat("dd-MM-yyyy").parse(event.endDate);
+    final endTime =
+        TimeOfDay.fromDateTime(DateFormat("h:mm a").parse(event.endTime))
+            .toDateTime();
+    final now = DateTime.now();
+
+    return endDate.isAfter(now) ||
+        (endDate.isAtSameMomentAs(now) && endTime.isAfter(now));
   }
 
   Future<dynamic> buildBottomParticipantSheet(BuildContext context,

@@ -87,17 +87,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         itemCount: searchController.searchedEvents.length,
                         itemBuilder: (context, index) {
                           Event event = searchController.searchedEvents[index];
-                          return DateFormat("dd-MM-yyyy")
-                                      .parse(event.endDate)
-                                      .isAfter(DateTime.now()) ||
-                                  (DateFormat("dd-MM-yyyy")
-                                          .parse(event.endDate)
-                                          .isAtSameMomentAs(DateTime.now()) &&
-                                      TimeOfDay.fromDateTime(
-                                              DateFormat("h:mm a")
-                                                  .parse(event.endTime))
-                                          .toDateTime()
-                                          .isAfter(DateTime.now()))
+                          return isEventOngoing(event)
                               ? InkWell(
                                   onTap: () {
                                     showModalBottomSheet(
@@ -232,5 +222,16 @@ class _SearchScreenState extends State<SearchScreen> {
         ),
       ),
     );
+  }
+
+  bool isEventOngoing(Event event) {
+    final endDate = DateFormat("dd-MM-yyyy").parse(event.endDate);
+    final endTime =
+        TimeOfDay.fromDateTime(DateFormat("h:mm a").parse(event.endTime))
+            .toDateTime();
+    final now = DateTime.now();
+
+    return endDate.isAfter(now) ||
+        (endDate.isAtSameMomentAs(now) && endTime.isAfter(now));
   }
 }

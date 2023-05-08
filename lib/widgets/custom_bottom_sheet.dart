@@ -13,7 +13,7 @@ import '../widgets/custom_button.dart';
 import '../widgets/custom_text.dart';
 
 class CustomBottomSheet extends StatefulWidget {
-  CustomBottomSheet({super.key, required this.event});
+  const CustomBottomSheet({super.key, required this.event});
 
   final Event event;
 
@@ -36,7 +36,7 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
         .doc(firebaseAuth.currentUser!.uid)
         .get();
     docRef.then((docSnap) {
-      if (docSnap.exists) {
+      if (mounted && docSnap.exists) {
         setState(() {
           isRegistered = true;
         });
@@ -46,11 +46,13 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
   }
 
   Future<void> _fetchHasAttendedStatus() async {
-    final status =
-        await eventController.fetchHasAttendedStatus(widget.event.id);
-    setState(() {
-      haveAttended = status;
-    });
+    if (mounted && isRegistered) {
+      final status =
+          await eventController.fetchHasAttendedStatus(widget.event.id);
+      setState(() {
+        haveAttended = status;
+      });
+    }
   }
 
   @override
@@ -184,16 +186,7 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
                       backgroundColor: ColorManager.primaryColor,
                     ),
                   )
-                : DateFormat("dd-MM-yyyy")
-                            .parse(widget.event.endDate)
-                            .isAfter(DateTime.now()) ||
-                        (DateFormat("dd-MM-yyyy")
-                                .parse(widget.event.endDate)
-                                .isAtSameMomentAs(DateTime.now()) &&
-                            TimeOfDay.fromDateTime(DateFormat("h:mm a")
-                                    .parse(widget.event.endTime))
-                                .toDateTime()
-                                .isAfter(DateTime.now()))
+                : isEventOngoing(widget.event)
                     ? haveAttended
                         ? Container()
                         : Obx(
@@ -231,5 +224,16 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
         ),
       ),
     );
+  }
+
+  bool isEventOngoing(Event event) {
+    final endDate = DateFormat("dd-MM-yyyy").parse(event.endDate);
+    final endTime =
+        TimeOfDay.fromDateTime(DateFormat("h:mm a").parse(event.endTime))
+            .toDateTime();
+    final now = DateTime.now();
+
+    return endDate.isAfter(now) ||
+        (endDate.isAtSameMomentAs(now) && endTime.isAfter(now));
   }
 }

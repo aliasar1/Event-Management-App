@@ -55,7 +55,6 @@ class _OrganizerHomeScreenState extends State<OrganizerHomeScreen> {
           items: const <Widget>[
             Icon(Icons.history, size: 30, color: ColorManager.blackColor),
             Icon(Icons.home_rounded, size: 30, color: ColorManager.blackColor),
-            //Icon(Icons.qr_code, size: 30, color: ColorManager.blackColor),
             Icon(Icons.account_circle,
                 size: 30, color: ColorManager.blackColor),
           ],
@@ -75,5 +74,5 @@ class _OrganizerHomeScreenState extends State<OrganizerHomeScreen> {
 var pages = [
   const EventsOrganizedScreen(),
   AddEventScreen(),
-  ProfileView(),
+  const ProfileView(),
 ];

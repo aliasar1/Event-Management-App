@@ -409,7 +409,6 @@ class EventController extends GetxController {
           .get();
       return snapshot.exists && snapshot.get('isFav') == true;
     } catch (e) {
-      print('Error checking if event is favorite: $e');
       return false;
     }
   }
@@ -473,6 +472,17 @@ class EventController extends GetxController {
     }).toList();
 
     return participantList;
+  }
+
+  Future<bool> isUserRegistered(String eventId) async {
+    final participantRef = firestore
+        .collection('events')
+        .doc(eventId)
+        .collection('participants')
+        .where('uid', isEqualTo: firebaseAuth.currentUser!.uid);
+
+    final querySnapshot = await participantRef.get();
+    return querySnapshot.docs.isNotEmpty;
   }
 
   Future<bool> fetchHasAttendedStatus(String eventId) async {
