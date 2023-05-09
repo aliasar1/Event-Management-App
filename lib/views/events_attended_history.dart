@@ -206,13 +206,16 @@ class EventsAttendedScreen extends StatelessWidget {
                                                     String url =
                                                         await eventController
                                                             .showEventQr(event);
+                                                    // ignore: use_build_context_synchronously
                                                     showQr(context, url);
                                                   },
-                                                  child: const Icon(
-                                                    Icons.qr_code,
-                                                    color: ColorManager
-                                                        .primaryColor,
-                                                  ),
+                                                  child: isEventOngoing(event)
+                                                      ? const Icon(
+                                                          Icons.qr_code,
+                                                          color: ColorManager
+                                                              .primaryColor,
+                                                        )
+                                                      : Container(),
                                                 ),
                                                 const SizedBox(
                                                   width: 12,

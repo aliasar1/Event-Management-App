@@ -78,7 +78,7 @@ class _ParticipantHomeScreenState extends State<ParticipantHomeScreen> {
 var participantPages = [
   EventsAttendedScreen(),
   const SearchScreen(),
-  EventScreen(),
+  const EventScreen(),
   FavouriteEventScreen(),
   const ProfileView(),
 ];
