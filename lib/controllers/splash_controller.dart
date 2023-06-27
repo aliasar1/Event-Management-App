@@ -10,8 +10,8 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 class SplashController extends GetxController {
   final authController = Get.put(AuthenticateController());
 
-  Future<void> initializeAuthentication() async {
-    await authController.checkLoginStatus();
+  void initializeAuthentication() {
+    authController.checkLoginStatus();
   }
 
   late RxBool offlineStatus = false.obs;

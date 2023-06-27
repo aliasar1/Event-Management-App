@@ -41,6 +41,9 @@ class StringsManager {
   // Hint Text
   static const String emailHintTxt = 'abc@gmail.com';
   static const String phoneHintTxt = '0331XXXXXXX';
+  static const String firstTimeLoginTitle = "Email Verification";
+  static const String firstTimeLogin =
+      "You need to verify email before proceeding.";
 }
 
 class ErrorManager {

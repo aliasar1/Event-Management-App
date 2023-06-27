@@ -23,10 +23,6 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    // Timer(
-    //   const Duration(seconds: 2),
-    //   () => splashController.authController.checkLoginStatus(),
-    // );
     Timer(
       const Duration(seconds: 2),
       () => authController.checkLoginStatus(),
@@ -38,27 +34,6 @@ class _SplashScreenState extends State<SplashScreen> {
     SizeConfig().init(context);
     return const SplashView();
   }
-
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Obx(
-  //     () {
-  //       if (splashController.offlineStatus.value == true) {
-  //         return const OfflineScreen();
-  //       } else {
-  //         if (controller.isLogin.value) {
-  //           if (controller.userTypeController == 'Participant') {
-  //             return ParticipantHomeScreen();
-  //           } else {
-  //             return OrganizerHomeScreen();
-  //           }
-  //         } else {
-  //           return LoginScreen();
-  //         }
-  //       }
-  //     },
-  //   );
-  // }
 }
 
 class SplashView extends StatelessWidget {
@@ -85,11 +60,10 @@ class SplashView extends StatelessWidget {
               ),
               Txt(
                 text: StringsManager.appName,
-                fontFamily: FontsManager.fontFamilyPoppins,
-                fontSize: FontSize.headerFontSize,
-                letterSpacing: SpacingManager.spaceS,
-                fontWeight: FontWeight.w900,
                 color: ColorManager.blackColor,
+                fontFamily: FontsManager.fontFamilyPoppins,
+                fontSize: FontSize.headerFontSize * 1.2,
+                fontWeight: FontWeightManager.bold,
               ),
             ],
           ),

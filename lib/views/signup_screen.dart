@@ -120,13 +120,17 @@ class SignupScreen extends StatelessWidget {
                             : Icons.visibility_off_rounded,
                         onSuffixTap: controller.toggleVisibility,
                         textInputAction: TextInputAction.done,
-                        onFieldSubmit: (v) {
-                          controller.registerUser(
-                            controller.emailController.text.trim(),
-                            controller.passwordController.text.trim(),
-                            controller.nameController.text.trim(),
-                            controller.phoneController.text.trim(),
+                        onFieldSubmit: (_) async {
+                          final isValid = await controller.signUpUser(
+                            email: controller.emailController.text,
+                            name: controller.nameController.text,
+                            password: controller.passwordController.text,
+                            phone: controller.phoneController.text,
                           );
+                          await controller.removeToken();
+                          if (isValid) {
+                            firstTimeLoginDialog(controller);
+                          }
                         },
                         validator: (value) {
                           if (value!.isEmpty) {
@@ -152,13 +156,17 @@ class SignupScreen extends StatelessWidget {
                                 ),
                               )
                             : null,
-                        onPressed: () {
-                          controller.registerUser(
-                            controller.emailController.text.trim(),
-                            controller.passwordController.text.trim(),
-                            controller.nameController.text.trim(),
-                            controller.phoneController.text.trim(),
+                        onPressed: () async {
+                          final isValid = await controller.signUpUser(
+                            email: controller.emailController.text,
+                            name: controller.nameController.text,
+                            password: controller.passwordController.text,
+                            phone: controller.phoneController.text,
                           );
+                          await controller.removeToken();
+                          if (isValid) {
+                            firstTimeLoginDialog(controller);
+                          }
                         },
                         text: StringsManager.registerTxt,
                         textColor: ColorManager.backgroundColor,
@@ -199,6 +207,47 @@ class SignupScreen extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Future<dynamic> firstTimeLoginDialog(AuthenticateController controller) {
+    return Get.dialog(
+      WillPopScope(
+        onWillPop: () async => false,
+        child: AlertDialog(
+          title: const Txt(
+            text: StringsManager.firstTimeLoginTitle,
+            color: ColorManager.blackColor,
+            fontFamily: FontsManager.fontFamilyPoppins,
+            fontSize: FontSize.textFontSize,
+            fontWeight: FontWeightManager.bold,
+          ),
+          content: const Txt(
+            text: StringsManager.firstTimeLogin,
+            color: ColorManager.blackColor,
+            fontFamily: FontsManager.fontFamilyPoppins,
+            fontSize: FontSize.subTitleFontSize,
+            fontWeight: FontWeightManager.regular,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                controller.logout();
+                controller.clearfields();
+                Get.offAll(LoginScreen());
+              },
+              child: const Txt(
+                text: StringsManager.loginTxt,
+                color: ColorManager.blackColor,
+                fontFamily: FontsManager.fontFamilyPoppins,
+                fontSize: FontSize.textFontSize,
+                fontWeight: FontWeightManager.bold,
+              ),
+            ),
+          ],
+        ),
+      ),
+      barrierDismissible: false,
     );
   }
 }

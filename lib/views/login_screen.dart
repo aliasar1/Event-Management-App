@@ -1,7 +1,6 @@
 // ignore: must_be_immutable
 import 'package:event_booking_app/views/signup_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../controllers/auth_controller.dart';
@@ -31,23 +30,34 @@ class LoginScreen extends StatelessWidget {
               child: Form(
                 key: controller.loginFormKey,
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SvgPicture.asset(
-                      'assets/images/login.svg',
-                      height: SizeManager.svgImageSize,
-                      width: SizeManager.svgImageSize,
-                      fit: BoxFit.scaleDown,
+                    const Center(
+                      child: Icon(
+                        Icons.calendar_month,
+                        size: SizeManager.splashIconSize,
+                        color: ColorManager.blackColor,
+                      ),
+                    ),
+                    const Txt(
+                      text: StringsManager.appName,
+                      color: ColorManager.blackColor,
+                      fontFamily: FontsManager.fontFamilyPoppins,
+                      fontSize: FontSize.headerFontSize * 1.2,
+                      fontWeight: FontWeightManager.bold,
                     ),
                     const SizedBox(
                       height: SizeManager.sizeXL,
                     ),
-                    const Txt(
-                      textAlign: TextAlign.start,
-                      text: StringsManager.loginTxt,
-                      fontWeight: FontWeightManager.bold,
-                      fontSize: FontSize.headerFontSize,
-                      fontFamily: FontsManager.fontFamilyPoppins,
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Txt(
+                        textAlign: TextAlign.start,
+                        text: StringsManager.loginTxt,
+                        fontWeight: FontWeightManager.bold,
+                        fontSize: FontSize.headerFontSize,
+                        fontFamily: FontsManager.fontFamilyPoppins,
+                      ),
                     ),
                     Container(
                       alignment: Alignment.centerLeft,
@@ -81,38 +91,6 @@ class LoginScreen extends StatelessWidget {
                     const SizedBox(
                       height: SizeManager.sizeSemiM,
                     ),
-                    RadioButtonFormField(
-                      labels: const ['Participant', 'Organizer'],
-                      icons: const [Icons.account_circle, Icons.groups],
-                      onChange: (String label, int index) =>
-                          controller.userTypeController = label,
-                      onSelected: (String label) =>
-                          controller.userTypeController = label,
-                      decoration: InputDecoration(
-                        labelText: 'User Type',
-                        contentPadding: const EdgeInsets.all(0.0),
-                        labelStyle: const TextStyle(
-                          color: ColorManager.primaryColor,
-                          fontSize: FontSize.textFontSize,
-                          fontWeight: FontWeight.w400,
-                        ),
-                        hintStyle: const TextStyle(
-                          color: Colors.grey,
-                          fontSize: FontSize.textFontSize,
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: ColorManager.primaryColor,
-                            width: 2,
-                          ),
-                          borderRadius:
-                              BorderRadius.circular(RadiusManager.fieldRadius),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: SizeManager.sizeL,
-                    ),
                     Obx(
                       () => CustomTextFormField(
                         controller: controller.passwordController,
@@ -125,11 +103,17 @@ class LoginScreen extends StatelessWidget {
                             : Icons.visibility_off_rounded,
                         onSuffixTap: controller.toggleVisibility,
                         textInputAction: TextInputAction.done,
-                        onFieldSubmit: (v) => controller.loginUser(
-                          controller.emailController.text.trim(),
-                          controller.passwordController.text.trim(),
-                          controller.userTypeController,
-                        ),
+                        onFieldSubmit: (_) async {
+                          bool isValid = await controller.login(
+                              controller.emailController.text,
+                              controller.passwordController.text);
+                          if (isValid) {
+                            if (!firebaseAuth.currentUser!.emailVerified) {
+                              await controller.removeToken();
+                              verifyDialog(controller);
+                            }
+                          }
+                        },
                         validator: (value) {
                           if (value!.isEmpty) {
                             return ErrorManager.kPasswordNullError;
@@ -171,12 +155,16 @@ class LoginScreen extends StatelessWidget {
                                 ),
                               )
                             : null,
-                        onPressed: () {
-                          controller.loginUser(
-                            controller.emailController.text.trim(),
-                            controller.passwordController.text.trim(),
-                            controller.userTypeController,
-                          );
+                        onPressed: () async {
+                          bool isValid = await controller.login(
+                              controller.emailController.text,
+                              controller.passwordController.text);
+                          if (isValid) {
+                            if (!firebaseAuth.currentUser!.emailVerified) {
+                              await controller.removeToken();
+                              verifyDialog(controller);
+                            }
+                          }
                         },
                         text: StringsManager.loginTxt,
                         textColor: ColorManager.backgroundColor,
@@ -214,6 +202,70 @@ class LoginScreen extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Future<dynamic> verifyDialog(AuthenticateController controller) {
+    return Get.dialog(
+      WillPopScope(
+        onWillPop: () async => false,
+        child: AlertDialog(
+          title: const Txt(
+            text: "Verify your email",
+            color: ColorManager.blackColor,
+            fontFamily: FontsManager.fontFamilyPoppins,
+            fontSize: FontSize.textFontSize,
+            fontWeight: FontWeightManager.bold,
+          ),
+          content: const Txt(
+            text: "An email is sent to you, please verify your account.",
+            color: ColorManager.blackColor,
+            fontFamily: FontsManager.fontFamilyPoppins,
+            fontSize: FontSize.subTitleFontSize,
+            fontWeight: FontWeightManager.regular,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () async {
+                try {
+                  await firebaseAuth.currentUser!.sendEmailVerification();
+                  controller.logout();
+                  Get.offAll(LoginScreen());
+                } catch (e) {
+                  Get.snackbar(
+                    'Error',
+                    'Failed to send email verification: $e',
+                  );
+                }
+              },
+              child: const Txt(
+                text: "Resend Email",
+                color: ColorManager.blackColor,
+                fontFamily: FontsManager.fontFamilyPoppins,
+                fontSize: FontSize.subTitleFontSize,
+                fontWeight: FontWeightManager.regular,
+              ),
+            ),
+            TextButton(
+              style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all(ColorManager.blackColor)),
+              onPressed: () {
+                controller.logout();
+                Get.offAll(LoginScreen());
+              },
+              child: const Txt(
+                text: "Login",
+                color: ColorManager.backgroundColor,
+                fontFamily: FontsManager.fontFamilyPoppins,
+                fontSize: FontSize.subTitleFontSize,
+                fontWeight: FontWeightManager.regular,
+              ),
+            ),
+          ],
+        ),
+      ),
+      barrierDismissible: false,
     );
   }
 }
