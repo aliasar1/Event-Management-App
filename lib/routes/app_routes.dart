@@ -4,7 +4,6 @@ class AppRoutes {
   static const String splash = SplashScreen.routeName;
   static const String login = LoginScreen.routeName;
   static const String signup = SignupScreen.routeName;
-  static const String organizerHome = OrganizerHomeScreen.routeName;
   static const String participantHome = ParticipantHomeScreen.routeName;
   static const String participantsEventsHistory =
       EventsAttendedScreen.routeName;

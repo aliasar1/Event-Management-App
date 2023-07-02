@@ -164,7 +164,22 @@ class AuthenticateController extends GetxController with CacheManager {
     if (getToken() == null || getToken() == false) {
       Get.offAll(LoginScreen());
     } else {
-      Get.offAll(const OrganizerHomeScreen());
+      Get.offAll(const EventScreen());
+    }
+  }
+
+  void resetPassword(String email) async {
+    try {
+      await firebaseAuth.sendPasswordResetEmail(email: email);
+      Get.snackbar(
+        'Success',
+        'Password reset email is send successfully.',
+      );
+    } catch (err) {
+      Get.snackbar(
+        'Error',
+        err.toString(),
+      );
     }
   }
 

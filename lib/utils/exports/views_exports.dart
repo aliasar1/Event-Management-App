@@ -4,7 +4,6 @@ export '../../views/events_screen.dart';
 export '../../views/login_screen.dart';
 export '../../views/offline_screen.dart';
 export '../../views/organized_events_screen.dart';
-export '../../views/organizer_home_screen.dart';
 export '../../views/profile_view.dart';
 export '../../views/search_screen.dart';
 export '../../views/signup_screen.dart';

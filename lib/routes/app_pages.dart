@@ -22,10 +22,6 @@ class AppPages {
       page: () => const ParticipantHomeScreen(),
     ),
     GetPage(
-      name: AppRoutes.organizerHome,
-      page: () => const OrganizerHomeScreen(),
-    ),
-    GetPage(
       name: AppRoutes.participantsEventsHistory,
       page: () => EventsAttendedScreen(),
     ),

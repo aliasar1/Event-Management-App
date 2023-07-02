@@ -1,9 +1,11 @@
+import 'package:event_booking_app/controllers/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../controllers/profile_controller.dart';
 import '../utils/exports/manager_exports.dart';
 import '../utils/exports/widgets_exports.dart';
+import '../widgets/custom_drawer.dart';
 
 class ProfileView extends StatefulWidget {
   const ProfileView({super.key});
@@ -16,6 +18,7 @@ class ProfileView extends StatefulWidget {
 
 class _ProfileViewState extends State<ProfileView> {
   final ProfileController profileController = Get.put(ProfileController());
+  final authController = Get.put(AuthenticateController());
   @override
   void initState() {
     super.initState();
@@ -34,89 +37,100 @@ class _ProfileViewState extends State<ProfileView> {
             ),
           );
         }
-        return Scaffold(
-          backgroundColor: ColorManager.scaffoldBackgroundColor,
-          body: SingleChildScrollView(
-            child: Container(
-              margin:
-                  const EdgeInsets.symmetric(horizontal: MarginManager.marginL),
-              alignment: Alignment.center,
-              child: Column(
-                children: [
-                  Obx(
-                    () => Stack(
-                      children: [
-                        CircleAvatar(
-                          radius: 64,
-                          backgroundImage: controller.user['profilePhoto'] == ""
-                              ? const NetworkImage(
-                                  'https://www.pngitem.com/pimgs/m/150-1503945_transparent-user-png-default-user-image-png-png.png')
-                              : Image.network(controller.user['profilePhoto'])
-                                  .image,
-                          backgroundColor: ColorManager.backgroundColor,
-                        ),
-                        Positioned(
-                          bottom: -10,
-                          left: 80,
-                          child: IconButton(
-                            onPressed: () => controller.pickImage(),
-                            icon: const Icon(
-                              Icons.add_a_photo,
-                              color: ColorManager.primaryColor,
+        return SafeArea(
+          child: Scaffold(
+            backgroundColor: ColorManager.scaffoldBackgroundColor,
+            drawer: CustomDrawer(
+              controller: authController,
+            ),
+            appBar: AppBar(
+              backgroundColor: ColorManager.scaffoldBackgroundColor,
+              elevation: 0,
+              iconTheme: const IconThemeData(color: ColorManager.blackColor),
+            ),
+            body: SingleChildScrollView(
+              child: Container(
+                margin: const EdgeInsets.symmetric(
+                    horizontal: MarginManager.marginL),
+                alignment: Alignment.center,
+                child: Column(
+                  children: [
+                    Obx(
+                      () => Stack(
+                        children: [
+                          CircleAvatar(
+                            radius: 64,
+                            backgroundImage: controller.user['profilePhoto'] ==
+                                    ""
+                                ? const NetworkImage(
+                                    'https://www.pngitem.com/pimgs/m/150-1503945_transparent-user-png-default-user-image-png-png.png')
+                                : Image.network(controller.user['profilePhoto'])
+                                    .image,
+                            backgroundColor: ColorManager.backgroundColor,
+                          ),
+                          Positioned(
+                            bottom: -10,
+                            left: 80,
+                            child: IconButton(
+                              onPressed: () => controller.pickImage(),
+                              icon: const Icon(
+                                Icons.add_a_photo,
+                                color: ColorManager.primaryColor,
+                              ),
                             ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      height: SizeManager.sizeXL,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: Txt(
+                            textAlign: TextAlign.center,
+                            text: controller.user['name'],
+                            color: ColorManager.blackColor,
+                            fontSize: FontSize.headerFontSize,
+                            fontFamily: FontsManager.fontFamilyPoppins,
+                            fontWeight: FontWeightManager.bold,
                           ),
                         ),
                       ],
                     ),
-                  ),
-                  const SizedBox(
-                    height: SizeManager.sizeXL,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: Txt(
-                          textAlign: TextAlign.center,
-                          text: controller.user['name'],
-                          color: ColorManager.blackColor,
-                          fontSize: FontSize.headerFontSize,
-                          fontFamily: FontsManager.fontFamilyPoppins,
-                          fontWeight: FontWeightManager.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Txt(
-                    text: controller.user['email'],
-                    color: ColorManager.blackColor,
-                    fontSize: FontSize.textFontSize,
-                    fontFamily: FontsManager.fontFamilyPoppins,
-                  ),
-                  const SizedBox(
-                    height: SizeManager.sizeXL,
-                  ),
-                  const Divider(
-                    height: 2,
-                    thickness: 2,
-                  ),
-                  const SizedBox(
-                    height: SizeManager.sizeXL * 3,
-                  ),
-                  Container(
-                    alignment: Alignment.bottomCenter,
-                    margin: const EdgeInsets.all(MarginManager.marginXL * 2),
-                    child: Column(
-                      children: [
-                        updatePassword(controller),
-                        const SizedBox(
-                          height: SizeManager.sizeL,
-                        ),
-                        updateProfile(controller),
-                      ],
+                    Txt(
+                      text: controller.user['email'],
+                      color: ColorManager.blackColor,
+                      fontSize: FontSize.textFontSize,
+                      fontFamily: FontsManager.fontFamilyPoppins,
                     ),
-                  ),
-                ],
+                    const SizedBox(
+                      height: SizeManager.sizeXL,
+                    ),
+                    const Divider(
+                      height: 2,
+                      thickness: 2,
+                    ),
+                    const SizedBox(
+                      height: SizeManager.sizeXL * 3,
+                    ),
+                    Container(
+                      alignment: Alignment.bottomCenter,
+                      margin: const EdgeInsets.all(MarginManager.marginXL * 2),
+                      child: Column(
+                        children: [
+                          updatePassword(controller),
+                          const SizedBox(
+                            height: SizeManager.sizeL,
+                          ),
+                          updateProfile(controller),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
