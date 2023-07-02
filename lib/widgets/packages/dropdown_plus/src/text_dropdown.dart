@@ -33,7 +33,7 @@ class TextDropdownFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropdownFormField<String>(
-      dropdownColor: ColorManager.scaffoldBackgroundColor,
+      dropdownColor: Color.fromARGB(255, 208, 208, 209),
       decoration: decoration,
       onSaved: onSaved,
       controller: controller,
@@ -44,7 +44,7 @@ class TextDropdownFormField extends StatelessWidget {
         str ?? '',
         style: const TextStyle(
           fontSize: 16,
-          color: ColorManager.blackColor,
+          color: ColorManager.primaryColor,
         ),
       ),
       findFn: findFn ?? (dynamic str) async => options,
@@ -55,7 +55,10 @@ class TextDropdownFormField extends StatelessWidget {
         return ListTile(
           title: Text(
             item,
-            style: TextStyle(color: selected ? Colors.white : Colors.black87),
+            style: TextStyle(
+                color: selected
+                    ? Colors.black
+                    : const Color.fromARGB(255, 111, 109, 109)),
           ),
           tileColor:
               focused ? const Color.fromARGB(20, 0, 0, 0) : Colors.transparent,

@@ -7,7 +7,6 @@ class AppRoutes {
   static const String participantHome = ParticipantHomeScreen.routeName;
   static const String participantsEventsHistory =
       EventsAttendedScreen.routeName;
-  static const String addEvent = AddEventScreen.routeName;
   static const String upcomingEvents = EventScreen.routeName;
   static const String favEvents = FavouriteEventScreen.routeName;
   static const String offline = OfflineScreen.routeName;

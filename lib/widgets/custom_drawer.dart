@@ -1,12 +1,17 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_booking_app/manager/font_manager.dart';
+import 'package:event_booking_app/views/my_events_screen.dart';
+import 'package:event_booking_app/views/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../manager/color_manager.dart';
 import '../manager/firebase_constants.dart';
+import '../models/user.dart';
 import '../utils/exports/controllers_exports.dart';
 import '../utils/exports/views_exports.dart';
 import '../utils/exports/widgets_exports.dart';
+import '../views/all_events_screen.dart';
 
 class CustomDrawer extends StatefulWidget {
   const CustomDrawer({super.key, required this.controller});
@@ -19,6 +24,7 @@ class CustomDrawer extends StatefulWidget {
 
 class _CustomDrawerState extends State<CustomDrawer> {
   final profileController = Get.put(ProfileController());
+  final authcController = Get.put(AuthenticateController());
 
   @override
   void initState() {
@@ -63,20 +69,22 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   const SizedBox(height: 10),
                   const Divider(),
                   buildDrawerTile("Profile", Icons.person, () {
-                    Get.offAll(const ProfileView());
+                    Get.offAll(ProfileScreen(
+                        user: User.fromMap(controller.user),
+                        controller: authcController));
                   }),
                   buildDrawerTile(
                     "All Events",
                     Icons.list_alt,
                     () {
-                      Get.offAll(const EventScreen());
+                      Get.offAll(AllEventsScreen());
                     },
                   ),
                   buildDrawerTile(
                     "My Events",
                     Icons.calendar_month,
                     () {
-                      Get.offAll(const EventsOrganizedScreen());
+                      Get.offAll(const MyEventsScreen());
                     },
                   ),
                   buildDrawerTile(

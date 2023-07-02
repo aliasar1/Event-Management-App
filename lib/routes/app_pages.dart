@@ -26,10 +26,6 @@ class AppPages {
       page: () => EventsAttendedScreen(),
     ),
     GetPage(
-      name: AppRoutes.addEvent,
-      page: () => AddEventScreen(),
-    ),
-    GetPage(
       name: AppRoutes.upcomingEvents,
       page: () => EventScreen(),
     ),

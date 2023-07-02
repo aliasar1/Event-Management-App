@@ -77,8 +77,15 @@ class EventController extends GetxController {
     update();
   }
 
-  void addEvent(String name, String startDate, String endDate, String startTime,
-      String endTime, String price, String category, String description) async {
+  Future<void> addEvent(
+      String name,
+      String startDate,
+      String endDate,
+      String startTime,
+      String endTime,
+      String price,
+      String category,
+      String description) async {
     if (addFormKey.currentState!.validate()) {
       addFormKey.currentState!.save();
       toggleLoading();
@@ -101,6 +108,7 @@ class EventController extends GetxController {
       );
       await firestore.collection('events').doc(id).set(event.toJson());
       allEvents.add(event);
+      organizedEvents.add(event);
       toggleLoading();
       Get.back();
       Get.snackbar(
@@ -165,7 +173,7 @@ class EventController extends GetxController {
       } else {
         final docSnapshot =
             await firestore.collection('users').doc(userObj.uid).get();
-        user = User.fromMap(docSnapshot);
+        user = User.fromSnap(docSnapshot);
       }
 
       generateAndSaveQrCode(user, eventId);
@@ -518,7 +526,7 @@ class EventController extends GetxController {
     }
 
     for (final participantDoc in participantSnapshot.docs) {
-      final participant = User.fromMap(participantDoc);
+      final participant = User.fromSnap(participantDoc);
       participantList.add(participant);
     }
     return participantList;
