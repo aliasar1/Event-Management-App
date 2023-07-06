@@ -80,5 +80,5 @@ var participantPages = [
   const SearchScreen(),
   const EventScreen(),
   FavouriteEventScreen(),
-  const ProfileView(),
+  // ProfileScreen(),
 ];

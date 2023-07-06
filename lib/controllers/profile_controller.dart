@@ -1,13 +1,13 @@
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import '../utils/exports/manager_exports.dart';
+
 import '../utils/utils.dart';
 
 class ProfileController extends GetxController {
@@ -18,22 +18,30 @@ class ProfileController extends GetxController {
   File? get profilePhoto => _pickedImage.value;
 
   final Rx<String> _uid = "".obs;
-
-  final editFormKey = GlobalKey<FormState>();
-  final editPassFormKey = GlobalKey<FormState>();
   Rx<bool> isLoading = false.obs;
   Rx<bool> isObscure1 = true.obs;
   Rx<bool> isObscure2 = true.obs;
   Rx<bool> isObscure3 = true.obs;
 
-  void toggleLoading({bool showMessage = false, String message = ''}) {
-    isLoading.value = !isLoading.value;
-    if (showMessage) {
-      Utils.showSnackBar(
-        message,
-        isSuccess: false,
-      );
-    }
+  final Rx<String> _nameRx = "".obs;
+  final Rx<String> _phoneRx = "".obs;
+
+  String get userName => _nameRx.value;
+  String get userPhone => _phoneRx.value;
+
+  final editPassFormKey = GlobalKey<FormState>();
+  final editInfoFormKey = GlobalKey<FormState>();
+
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController addressController = TextEditingController();
+  final TextEditingController oldPasswordController = TextEditingController();
+  final TextEditingController newPasswordController = TextEditingController();
+  final TextEditingController newRePasswordController = TextEditingController();
+
+  updateUserId(String uid) {
+    _uid.value = uid;
+    getUserData();
   }
 
   void toggleVisibility1() {
@@ -48,32 +56,14 @@ class ProfileController extends GetxController {
     isObscure3.value = !isObscure3.value;
   }
 
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController phoneController = TextEditingController();
-  final TextEditingController oldPassController = TextEditingController();
-  final TextEditingController newPassController = TextEditingController();
-  final TextEditingController newRePassController = TextEditingController();
-
-  updateUser(String name, String phone) async {
-    if (editFormKey.currentState!.validate()) {
-      editFormKey.currentState!.save();
-      toggleLoading();
-      await firestore.collection('users').doc(_uid.value).update({
-        'name': name,
-        'phone': phone,
-      }).whenComplete(() {
-        toggleLoading();
-        getUserData();
-        Get.back();
-        Get.snackbar('User details updated!',
-            'You have successfully updated user details!');
-      });
+  void toggleLoading({bool showMessage = false, String message = ''}) {
+    isLoading.value = !isLoading.value;
+    if (showMessage) {
+      Utils.showSnackBar(
+        message,
+        isSuccess: false,
+      );
     }
-  }
-
-  updateUserId(String uid) {
-    _uid.value = uid;
-    getUserData();
   }
 
   void getUserData() async {
@@ -96,6 +86,18 @@ class ProfileController extends GetxController {
           'You have successfully selected your profile picture.');
     });
     update();
+  }
+
+  Future<String> _uploadToStorage(File image) async {
+    Reference ref = firebaseStorage
+        .ref()
+        .child('profilePics')
+        .child(firebaseAuth.currentUser!.uid);
+
+    UploadTask uploadTask = ref.putFile(image);
+    TaskSnapshot snap = await uploadTask;
+    String downloadUrl = await snap.ref.getDownloadURL();
+    return downloadUrl;
   }
 
   void changePassword(
@@ -125,24 +127,31 @@ class ProfileController extends GetxController {
     resetFields();
   }
 
-  Future<String> _uploadToStorage(File image) async {
-    Reference ref = firebaseStorage
-        .ref()
-        .child('profilePics')
-        .child(firebaseAuth.currentUser!.uid);
-
-    UploadTask uploadTask = ref.putFile(image);
-    TaskSnapshot snap = await uploadTask;
-    String downloadUrl = await snap.ref.getDownloadURL();
-    return downloadUrl;
+  updateUser(String name, String phone) async {
+    if (editInfoFormKey.currentState!.validate()) {
+      editInfoFormKey.currentState!.save();
+      toggleLoading();
+      await firestore.collection('users').doc(_uid.value).update({
+        'name': name,
+        'phone': phone,
+      }).whenComplete(() {
+        toggleLoading();
+        getUserData();
+        _nameRx.value = name;
+        _phoneRx.value = phone;
+        Get.back();
+        Get.snackbar('User details updated!',
+            'You have successfully updated user details!');
+      });
+    }
   }
 
   void resetFields() {
     nameController.clear();
     phoneController.clear();
-    newPassController.clear();
-    newRePassController.clear();
-    oldPassController.clear();
-    update();
+    newPasswordController.clear();
+    oldPasswordController.clear();
+    newRePasswordController.clear();
+    addressController.clear();
   }
 }

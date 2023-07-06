@@ -1,3 +1,4 @@
+import 'package:event_booking_app/views/profile_screen.dart';
 import 'package:get/get.dart';
 
 import '../utils/exports/views_exports.dart';
@@ -40,10 +41,6 @@ class AppPages {
     GetPage(
       name: AppRoutes.eventsOrganized,
       page: () => const EventsOrganizedScreen(),
-    ),
-    GetPage(
-      name: AppRoutes.profile,
-      page: () => const ProfileView(),
     ),
     GetPage(
       name: AppRoutes.searchEvent,

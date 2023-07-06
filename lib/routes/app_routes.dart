@@ -1,3 +1,5 @@
+import 'package:event_booking_app/views/profile_screen.dart';
+
 import '../utils/exports/views_exports.dart';
 
 class AppRoutes {
@@ -11,6 +13,6 @@ class AppRoutes {
   static const String favEvents = FavouriteEventScreen.routeName;
   static const String offline = OfflineScreen.routeName;
   static const String eventsOrganized = EventsOrganizedScreen.routeName;
-  static const String profile = ProfileView.routeName;
+  static const String profile = ProfileScreen.routeName;
   static const String searchEvent = SearchScreen.routeName;
 }

@@ -63,7 +63,7 @@ class ProfileScreen extends StatelessWidget {
                         onPressed: () => profileController.pickImage(),
                         icon: const Icon(
                           Icons.add_a_photo,
-                          color: ColorManager.secondaryColor,
+                          color: ColorManager.blackColor,
                         ),
                       ),
                     ),
@@ -79,8 +79,10 @@ class ProfileScreen extends StatelessWidget {
                       Expanded(
                         child: Txt(
                           textAlign: TextAlign.center,
-                          text: user.name,
-                          color: ColorManager.primaryColor,
+                          text: profileController.userName == ""
+                              ? user.name
+                              : profileController.userName,
+                          color: ColorManager.blackColor,
                           fontSize: FontSize.textFontSize,
                           fontFamily: FontsManager.fontFamilyPoppins,
                           fontWeight: FontWeightManager.bold,
@@ -97,8 +99,10 @@ class ProfileScreen extends StatelessWidget {
                 ),
                 Obx(
                   () => Txt(
-                    text: user.phone,
-                    color: ColorManager.primaryColor,
+                    text: profileController.userPhone == ""
+                        ? user.phone
+                        : profileController.userPhone,
+                    color: ColorManager.blackColor,
                     fontSize: FontSize.subTitleFontSize,
                     fontFamily: FontsManager.fontFamilyPoppins,
                   ),
@@ -118,16 +122,16 @@ class ProfileScreen extends StatelessWidget {
                   children: [
                     InkWell(
                       onTap: () {
-                        // buildUpdatePassDialog(profileController, context);
+                        buildUpdatePassDialog(profileController, context);
                       },
                       child: const ListTile(
                         leading: Icon(
                           Icons.lock,
-                          color: ColorManager.secondaryColor,
+                          color: ColorManager.primaryColor,
                         ),
                         title: Txt(
                           text: "Update Password",
-                          color: ColorManager.primaryColor,
+                          color: ColorManager.blackColor,
                           fontSize: FontSize.subTitleFontSize * 1.1,
                           fontWeight: FontWeightManager.medium,
                           fontFamily: FontsManager.fontFamilyPoppins,
@@ -141,17 +145,17 @@ class ProfileScreen extends StatelessWidget {
                       onTap: () async {
                         profileController.nameController.text = user.name;
                         profileController.phoneController.text = user.phone;
-                        // await buildUpdateProfileDialog(
-                        //     profileController, context);
+                        await buildUpdateProfileDialog(
+                            profileController, context);
                       },
                       child: const ListTile(
                         leading: Icon(
                           Icons.person,
-                          color: ColorManager.secondaryColor,
+                          color: ColorManager.primaryColor,
                         ),
                         title: Txt(
                           text: "Update Personal Information",
-                          color: ColorManager.primaryColor,
+                          color: ColorManager.blackColor,
                           fontSize: FontSize.subTitleFontSize * 1.1,
                           fontWeight: FontWeightManager.medium,
                           fontFamily: FontsManager.fontFamilyPoppins,
@@ -167,7 +171,7 @@ class ProfileScreen extends StatelessWidget {
                   alignment: Alignment.bottomCenter,
                   child: const Txt(
                     text: "Powered By EvenTick ©",
-                    color: ColorManager.primaryColor,
+                    color: ColorManager.blackColor,
                     fontSize: FontSize.subTitleFontSize * 1.1,
                     fontWeight: FontWeightManager.medium,
                     fontFamily: FontsManager.fontFamilyPoppins,
@@ -181,203 +185,185 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  // Future<dynamic> buildUpdatePassDialog(
-  //     ProfileController controller, BuildContext context) {\
-  //   return Get.defaultDialog(
-  //     title: StringsManager.changePasswordTxt,
-  //     titleStyle: TextStyle(
-  //         color: ColorManager.primaryColor,
-  //         fontWeight: FontWeight.bold,
-  //         fontSize: FontSize.titleFontSize),
-  //     titlePadding:
-  //         const EdgeInsets.symmetric(vertical: PaddingManager.paddingM),
-  //     radius: 5,
-  //     content: Form(
-  //       key: profileController.editPassFormKey,
-  //       child: Column(
-  //         children: [
-  //           Obx(
-  //             () => CustomTextFormField(
-  //               controller: profileController.oldPasswordController,
-  //               suffixIconData: controller.isObscure1.value
-  //                   ? Icons.visibility_rounded
-  //                   : Icons.visibility_off_rounded,
-  //               onSuffixTap: controller.toggleVisibility1,
-  //               labelText: StringsManager.oldPasswordTxt,
-  //               obscureText: controller.isObscure1.value,
-  //               prefixIconData: Icons.lock,
-  //               textInputAction: TextInputAction.next,
-  //               autofocus: false,
-  //               validator: (value) {
-  //                 if (value!.isEmpty) {
-  //                   return ErrorManager.kPasswordNullError;
-  //                 }
-  //                 return null;
-  //               },
-  //             ),
-  //           ),
-  //           const SizedBox(
-  //             height: 12,
-  //           ),
-  //           Obx(
-  //             () => CustomTextFormField(
-  //               controller: controller.newPasswordController,
-  //               labelText: StringsManager.newPasswordTxt,
-  //               suffixIconData: controller.isObscure2.value
-  //                   ? Icons.visibility_rounded
-  //                   : Icons.visibility_off_rounded,
-  //               onSuffixTap: controller.toggleVisibility2,
-  //               obscureText: controller.isObscure2.value,
-  //               prefixIconData: Icons.key,
-  //               textInputAction: TextInputAction.next,
-  //               autofocus: false,
-  //               validator: (value) {
-  //                 if (value!.isEmpty) {
-  //                   return ErrorManager.kPasswordNullError;
-  //                 }
-  //                 return null;
-  //               },
-  //             ),
-  //           ),
-  //           const SizedBox(
-  //             height: 12,
-  //           ),
-  //           Obx(
-  //             () => CustomTextFormField(
-  //               controller: controller.newRePasswordController,
-  //               labelText: StringsManager.newRePasswordTxt,
-  //               suffixIconData: controller.isObscure3.value
-  //                   ? Icons.visibility_rounded
-  //                   : Icons.visibility_off_rounded,
-  //               onSuffixTap: controller.toggleVisibility3,
-  //               obscureText: controller.isObscure3.value,
-  //               prefixIconData: Icons.key,
-  //               textInputAction: TextInputAction.done,
-  //               autofocus: false,
-  //               validator: (value) {
-  //                 if (value!.isEmpty) {
-  //                   return ErrorManager.kPasswordNullError;
-  //                 }
-  //                 return null;
-  //               },
-  //             ),
-  //           ),
-  //           const SizedBox(
-  //             height: 12,
-  //           ),
-  //           Obx(
-  //             () => CustomButton(
-  //               color: ColorsManager.secondaryColor,
-  //               loadingWidget: controller.isLoading.value
-  //                   ? const Center(
-  //                       child: CircularProgressIndicator(
-  //                         color: Colors.white,
-  //                         backgroundColor: ColorsManager.scaffoldBgColor,
-  //                       ),
-  //                     )
-  //                   : null,
-  //               onPressed: () {
-  //                 controller.changePassword(
-  //                     controller.oldPasswordController.text.trim(),
-  //                     controller.newPasswordController.text.trim(),
-  //                     controller.newRePasswordController.text.trim());
-  //               },
-  //               text: "Change",
-  //               hasInfiniteWidth: true,
-  //               textColor: ColorsManager.whiteColor,
-  //             ),
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
+  Future<dynamic> buildUpdatePassDialog(
+      ProfileController controller, BuildContext context) {
+    return Get.defaultDialog(
+      title: StringsManager.changePasswordTxt,
+      titleStyle: const TextStyle(
+          color: ColorManager.primaryColor,
+          fontWeight: FontWeight.bold,
+          fontSize: FontSize.titleFontSize),
+      titlePadding:
+          const EdgeInsets.symmetric(vertical: PaddingManager.paddingM),
+      radius: 5,
+      content: Form(
+        key: profileController.editPassFormKey,
+        child: Column(
+          children: [
+            Obx(
+              () => CustomTextFormField(
+                controller: profileController.oldPasswordController,
+                suffixIconData: controller.isObscure1.value
+                    ? Icons.visibility_rounded
+                    : Icons.visibility_off_rounded,
+                onSuffixTap: controller.toggleVisibility1,
+                labelText: StringsManager.oldPasswordTxt,
+                obscureText: controller.isObscure1.value,
+                prefixIconData: Icons.lock,
+                textInputAction: TextInputAction.next,
+                autofocus: false,
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return ErrorManager.kPasswordNullError;
+                  }
+                  return null;
+                },
+              ),
+            ),
+            const SizedBox(
+              height: 12,
+            ),
+            Obx(
+              () => CustomTextFormField(
+                controller: controller.newPasswordController,
+                labelText: StringsManager.newPasswordTxt,
+                suffixIconData: controller.isObscure2.value
+                    ? Icons.visibility_rounded
+                    : Icons.visibility_off_rounded,
+                onSuffixTap: controller.toggleVisibility2,
+                obscureText: controller.isObscure2.value,
+                prefixIconData: Icons.key,
+                textInputAction: TextInputAction.next,
+                autofocus: false,
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return ErrorManager.kPasswordNullError;
+                  }
+                  return null;
+                },
+              ),
+            ),
+            const SizedBox(
+              height: 12,
+            ),
+            Obx(
+              () => CustomTextFormField(
+                controller: controller.newRePasswordController,
+                labelText: StringsManager.newRePasswordTxt,
+                suffixIconData: controller.isObscure3.value
+                    ? Icons.visibility_rounded
+                    : Icons.visibility_off_rounded,
+                onSuffixTap: controller.toggleVisibility3,
+                obscureText: controller.isObscure3.value,
+                prefixIconData: Icons.key,
+                textInputAction: TextInputAction.done,
+                autofocus: false,
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return ErrorManager.kPasswordNullError;
+                  }
+                  return null;
+                },
+              ),
+            ),
+            const SizedBox(
+              height: 12,
+            ),
+            Obx(
+              () => CustomButton(
+                color: ColorManager.primaryColor,
+                loadingWidget: controller.isLoading.value
+                    ? const Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                          backgroundColor: ColorManager.scaffoldBackgroundColor,
+                        ),
+                      )
+                    : null,
+                onPressed: () {
+                  controller.changePassword(
+                      controller.oldPasswordController.text.trim(),
+                      controller.newPasswordController.text.trim(),
+                      controller.newRePasswordController.text.trim());
+                },
+                text: "Change",
+                hasInfiniteWidth: true,
+                textColor: Colors.white,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
-  // Future<dynamic> buildUpdateProfileDialog(
-  //     ProfileController controller, BuildContext context) {
-  //   final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-  //   return Get.defaultDialog(
-  //     title: "Edit Personal Details",
-  //     titleStyle: TextStyle(
-  //         color: isDarkMode
-  //             ? DarkColorsManager.whiteColor
-  //             : ColorsManager.primaryColor,
-  //         fontWeight: FontWeight.bold,
-  //         fontSize: FontSize.titleFontSize),
-  //     titlePadding:
-  //         const EdgeInsets.symmetric(vertical: PaddingManager.paddingM),
-  //     radius: 5,
-  //     content: Form(
-  //       key: controller.editInfoFormKey,
-  //       child: Column(
-  //         children: [
-  //           CustomTextFormField(
-  //             controller: controller.nameController,
-  //             labelText: StringsManager.nameTxt,
-  //             prefixIconData: Icons.person,
-  //             textInputAction: TextInputAction.next,
-  //             autofocus: false,
-  //             validator: (value) {
-  //               if (value!.isEmpty) {
-  //                 return ErrorManager.kUserNameNullError;
-  //               }
-  //               return null;
-  //             },
-  //           ),
-  //           const SizedBox(height: SizeManager.sizeM),
-  //           CustomTextFormField(
-  //             controller: controller.phoneController,
-  //             labelText: StringsManager.phoneTxt,
-  //             maxLines: 1,
-  //             prefixIconData: Icons.phone,
-  //             textInputAction: TextInputAction.next,
-  //             autofocus: false,
-  //             validator: (value) {
-  //               if (value!.isEmpty) {
-  //                 return ErrorManager.kPhoneNullError;
-  //               }
-  //               return null;
-  //             },
-  //           ),
-  //           const SizedBox(height: SizeManager.sizeM),
-  //           CustomTextFormField(
-  //             controller: controller.addressController,
-  //             labelText: StringsManager.addressTxt,
-  //             prefixIconData: Icons.home,
-  //             textInputAction: TextInputAction.done,
-  //             autofocus: false,
-  //             validator: (value) {
-  //               if (value!.isEmpty) {
-  //                 return ErrorManager.kaddressNullError;
-  //               }
-  //               return null;
-  //             },
-  //           ),
-  //           const SizedBox(height: SizeManager.sizeM),
-  //           CustomButton(
-  //             color: ColorsManager.secondaryColor,
-  //             loadingWidget: controller.isLoading.value
-  //                 ? const Center(
-  //                     child: CircularProgressIndicator(
-  //                       color: Colors.white,
-  //                       backgroundColor: ColorsManager.scaffoldBgColor,
-  //                     ),
-  //                   )
-  //                 : null,
-  //             onPressed: () {
-  //               profileController.updateUser(
-  //                 profileController.nameController.text.trim(),
-  //                 profileController.phoneController.text.trim(),
-  //                 profileController.addressController.text.trim(),
-  //               );
-  //             },
-  //             text: "Edit",
-  //             hasInfiniteWidth: true,
-  //             textColor: ColorsManager.whiteColor,
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
+  Future<dynamic> buildUpdateProfileDialog(
+      ProfileController controller, BuildContext context) {
+    return Get.defaultDialog(
+      title: "Edit Personal Details",
+      titleStyle: const TextStyle(
+          color: ColorManager.primaryColor,
+          fontWeight: FontWeight.bold,
+          fontSize: FontSize.titleFontSize),
+      titlePadding:
+          const EdgeInsets.symmetric(vertical: PaddingManager.paddingM),
+      radius: 5,
+      content: Form(
+        key: controller.editInfoFormKey,
+        child: Column(
+          children: [
+            CustomTextFormField(
+              controller: controller.nameController,
+              labelText: StringsManager.nameTxt,
+              prefixIconData: Icons.person,
+              textInputAction: TextInputAction.next,
+              autofocus: false,
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return ErrorManager.kUserNameNullError;
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: SizeManager.sizeM),
+            CustomTextFormField(
+              controller: controller.phoneController,
+              labelText: StringsManager.phoneTxt,
+              maxLines: 1,
+              prefixIconData: Icons.phone,
+              textInputAction: TextInputAction.next,
+              autofocus: false,
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return ErrorManager.kPhoneNullError;
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: SizeManager.sizeM),
+            CustomButton(
+              color: ColorManager.primaryColor,
+              loadingWidget: controller.isLoading.value
+                  ? const Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                        backgroundColor: ColorManager.scaffoldBackgroundColor,
+                      ),
+                    )
+                  : null,
+              onPressed: () {
+                profileController.updateUser(
+                  profileController.nameController.text.trim(),
+                  profileController.phoneController.text.trim(),
+                );
+              },
+              text: "Edit",
+              hasInfiniteWidth: true,
+              textColor: Colors.white,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }

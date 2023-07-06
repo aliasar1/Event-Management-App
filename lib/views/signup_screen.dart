@@ -215,6 +215,7 @@ class SignupScreen extends StatelessWidget {
       WillPopScope(
         onWillPop: () async => false,
         child: AlertDialog(
+          backgroundColor: ColorManager.scaffoldBackgroundColor,
           title: const Txt(
             text: StringsManager.firstTimeLoginTitle,
             color: ColorManager.blackColor,
