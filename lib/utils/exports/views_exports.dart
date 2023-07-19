@@ -1,4 +1,3 @@
-export '../../views/events_crud_screen.dart';
 export '../../views/events_attended_history.dart';
 export '../../views/events_screen.dart';
 export '../../views/login_screen.dart';

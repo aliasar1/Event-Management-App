@@ -34,30 +34,33 @@ class EventListCard extends StatelessWidget {
       height: 150,
       child: Row(
         children: [
-          SizedBox(
-            width: 140,
-            height: 150,
-            child: Image.network(
-              event.posterUrl,
-              loadingBuilder: (BuildContext context, Widget child,
-                  ImageChunkEvent? loadingProgress) {
-                if (loadingProgress == null) {
-                  return child;
-                }
-                return Center(
-                  child: CircularProgressIndicator(
-                    color: ColorManager.blackColor,
-                    value: loadingProgress.expectedTotalBytes != null
-                        ? loadingProgress.cumulativeBytesLoaded /
-                            loadingProgress.expectedTotalBytes!
-                        : null,
-                  ),
-                );
-              },
-              errorBuilder: (BuildContext context, Object exception,
-                  StackTrace? stackTrace) {
-                return const Icon(Icons.error);
-              },
+          Hero(
+            tag: event.id,
+            child: SizedBox(
+              width: 140,
+              height: 150,
+              child: Image.network(
+                event.posterUrl,
+                loadingBuilder: (BuildContext context, Widget child,
+                    ImageChunkEvent? loadingProgress) {
+                  if (loadingProgress == null) {
+                    return child;
+                  }
+                  return Center(
+                    child: CircularProgressIndicator(
+                      color: ColorManager.blackColor,
+                      value: loadingProgress.expectedTotalBytes != null
+                          ? loadingProgress.cumulativeBytesLoaded /
+                              loadingProgress.expectedTotalBytes!
+                          : null,
+                    ),
+                  );
+                },
+                errorBuilder: (BuildContext context, Object exception,
+                    StackTrace? stackTrace) {
+                  return const Icon(Icons.error);
+                },
+              ),
             ),
           ),
           const SizedBox(
@@ -106,6 +109,7 @@ class EventListCard extends StatelessWidget {
                                 .getAllEventParticipants(event.id);
                             final presence =
                                 await eventController.getUserPresence(event.id);
+                            // ignore: use_build_context_synchronously
                             buildBottomParticipantSheet(
                                 context, participants, presence);
                           },

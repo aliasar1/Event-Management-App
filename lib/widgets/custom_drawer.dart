@@ -1,7 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_booking_app/manager/font_manager.dart';
 import 'package:event_booking_app/views/my_events_screen.dart';
-import 'package:event_booking_app/views/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

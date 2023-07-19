@@ -1,5 +1,4 @@
 import 'package:event_booking_app/controllers/auth_controller.dart';
-import 'package:event_booking_app/utils/exports/views_exports.dart';
 import 'package:event_booking_app/views/edit_add_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -126,7 +125,7 @@ class _MyEventsScreenState extends State<MyEventsScreen> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            Get.to(AddEventScreen());
+            Get.to(const AddEventScreen());
           },
           backgroundColor: ColorManager.blackColor,
           child: const Icon(

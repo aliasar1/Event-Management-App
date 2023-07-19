@@ -1,4 +1,3 @@
-import 'package:event_booking_app/views/profile_screen.dart';
 import 'package:get/get.dart';
 
 import '../utils/exports/views_exports.dart';

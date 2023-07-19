@@ -16,6 +16,7 @@ import '../utils/utils.dart';
 class EventController extends GetxController {
   Rx<bool> isLoading = false.obs;
   Rx<bool> isLoading2 = false.obs;
+  Rx<bool> isRegisteredEvents = false.obs;
   Rx<bool> isFav = false.obs;
   final addFormKey = GlobalKey<FormState>();
 
@@ -24,6 +25,7 @@ class EventController extends GetxController {
 
   RxList<Event> organizedEvents = <Event>[].obs;
   RxList<Event> allEvents = <Event>[].obs;
+  RxList<Event> registeredEvents = <Event>[].obs;
   RxList<Event> attendedEvents = <Event>[].obs;
   RxList<Event> favoriteEvents = <Event>[].obs;
 
@@ -35,6 +37,12 @@ class EventController extends GetxController {
   final priceController = TextEditingController();
   final descriptionController = TextEditingController();
   var categoryController = DropdownEditingController<String>();
+
+  final Rx<String> _eventNameRx = "".obs;
+  final Rx<String> _eventDescriptionRx = "".obs;
+
+  String get eventName => _eventNameRx.value;
+  String get eventDescription => _eventDescriptionRx.value;
 
   void toggleLoading({bool showMessage = false, String message = ''}) {
     isLoading.value = !isLoading.value;
@@ -48,6 +56,10 @@ class EventController extends GetxController {
 
   void toggleLoading2() {
     isLoading.value = !isLoading.value;
+  }
+
+  void toggleRegisteredEvent(bool val) {
+    isRegisteredEvents.value = val;
   }
 
   Future<String> _uploadToStorage(File image) async {
@@ -332,6 +344,40 @@ class EventController extends GetxController {
         'Error!',
         'Error fetching event details: $e',
       );
+      return [];
+    }
+  }
+
+  Future<List<Event>> loadRegisteredEvents() async {
+    try {
+      registeredEvents.clear();
+      final eventIds = await getAllEventIds();
+      List<Event> events = [];
+
+      for (final eventId in eventIds) {
+        final participantRef = firestore
+            .collection('events')
+            .doc(eventId)
+            .collection('participants')
+            .doc(firebaseAuth.currentUser!.uid);
+
+        final participantSnapshot = await participantRef.get();
+
+        if (participantSnapshot.exists) {
+          final eventDoc =
+              await firestore.collection('events').doc(eventId).get();
+          final event = Event.fromSnap(eventDoc);
+          events.add(event);
+        }
+      }
+      registeredEvents = RxList<Event>.from(events.toList());
+      return events;
+    } catch (e) {
+      Get.snackbar(
+        'Error!',
+        e.toString(),
+      );
+
       return [];
     }
   }
